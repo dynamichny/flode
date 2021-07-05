@@ -1,11 +1,11 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { AppNavigation } from '_navigations';
+import { BottomNavigation } from '_navigations';
 
 const App = () => (
   <NavigationContainer>
-    <AppNavigation />
+    <BottomNavigation /> {/* TODO: Change to root navigation */}
   </NavigationContainer>
 );
 

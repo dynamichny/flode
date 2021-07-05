@@ -1,11 +1,12 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { Colors } from '_styles';
 
 interface Props {}
 
 const CreateScreen = (props: Props) => {
   return (
-    <View>
+    <View style={s.wrapper}>
       <Text></Text>
     </View>
   );
@@ -13,4 +14,9 @@ const CreateScreen = (props: Props) => {
 
 export default CreateScreen;
 
-const styles = StyleSheet.create({});
+const s = StyleSheet.create({
+  wrapper: {
+    backgroundColor: Colors.WHITE,
+    flex: 1,
+  },
+});

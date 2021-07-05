@@ -14,6 +14,7 @@
 		400CBADF58631D04ACBEFC63 /* libPods-Flode-FlodeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87B81996E056229A5155F5BF /* libPods-Flode-FlodeTests.a */; };
 		79D71837384C1E5999B6A9BF /* libPods-Flode.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18EADABCA95A3FB9B61C8909 /* libPods-Flode.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		D395A222269389CE001CD2AC /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D395A221269389CE001CD2AC /* libRNSVG.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +43,7 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Flode/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		87B81996E056229A5155F5BF /* libPods-Flode-FlodeTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Flode-FlodeTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		936225D349F59A8665D5A514 /* Pods-Flode-FlodeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Flode-FlodeTests.release.xcconfig"; path = "Target Support Files/Pods-Flode-FlodeTests/Pods-Flode-FlodeTests.release.xcconfig"; sourceTree = "<group>"; };
+		D395A221269389CE001CD2AC /* libRNSVG.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNSVG.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		EDF58912323607056A2B65CC /* Pods-Flode.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Flode.release.xcconfig"; path = "Target Support Files/Pods-Flode/Pods-Flode.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -59,6 +61,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D395A222269389CE001CD2AC /* libRNSVG.a in Frameworks */,
 				79D71837384C1E5999B6A9BF /* libPods-Flode.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -99,6 +102,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D395A221269389CE001CD2AC /* libRNSVG.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				18EADABCA95A3FB9B61C8909 /* libPods-Flode.a */,
 				87B81996E056229A5155F5BF /* libPods-Flode-FlodeTests.a */,
@@ -145,7 +149,6 @@
 				24ACC3BD6EE5B8106DC645B8 /* Pods-Flode-FlodeTests.debug.xcconfig */,
 				936225D349F59A8665D5A514 /* Pods-Flode-FlodeTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};

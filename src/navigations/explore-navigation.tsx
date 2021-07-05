@@ -1,10 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Colors } from '_styles';
 
-interface Props {}
-
-const CookbookScreen = (props: Props) => {
+const ExploreNavigation = () => {
   return (
     <View style={s.wrapper}>
       <Text></Text>
@@ -12,11 +10,11 @@ const CookbookScreen = (props: Props) => {
   );
 };
 
-export default CookbookScreen;
+export default ExploreNavigation;
 
 const s = StyleSheet.create({
   wrapper: {
-    backgroundColor: Colors.TERTIARY,
+    backgroundColor: Colors.SECONDARY,
     flex: 1,
   },
 });
