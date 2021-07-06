@@ -54,7 +54,7 @@ export default function BottomNavigation() {
           tabBarIcon: ({ focused }) => (
             <TouchableOpacity
               style={s.iconWrapper}
-              onPress={() => navigation.navigate('Create')}>
+              onPress={() => navigation.navigate('CreateModal')}>
               <CreateIcon
                 color={focused ? Colors.PRIMARY : Colors.GRAY_MEDIUM}
                 height={32}

@@ -21,7 +21,7 @@ export default function RootNavigation() {
         };
       }}>
       <RootStack.Screen name={'Stack'} component={StackNavigation} />
-      <RootStack.Screen name={'Create'} component={CreateScreen} />
+      <RootStack.Screen name={'CreateModal'} component={CreateScreen} />
     </RootStack.Navigator>
   );
 }
