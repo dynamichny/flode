@@ -9,7 +9,7 @@ interface Props {
 
 const ImagePicker = ({ parseImage }: Props) => {
   const handleImagePicker = async () => {
-    console.log('xd');
+    console.log('x');
   };
   return (
     <View style={s.wrapper}>
