@@ -1,1 +1,2 @@
-export { default as HelloWorld } from './HelloWorld';
+export { default as ActionIconWrapper } from './ActionIconWrapper';
+export { default as ImagePicker } from './ImagePicker';
