@@ -12,6 +12,7 @@ const Tab = createBottomTabNavigator();
 export default function BottomNavigation() {
   return (
     <Tab.Navigator
+      initialRouteName="Cookbook"
       tabBarOptions={{
         showLabel: false,
         style: {

@@ -1,4 +1,4 @@
-import { Categories } from './categories';
+import { categories } from './categories';
 export default [
   {
     images: [
@@ -31,7 +31,20 @@ export default [
       'Serve on toasted buns and top each with the beer-braised onions.',
     ],
     public: true,
-    categories: [Categories.Fast_Food, Categories.Burger],
+    categories: [
+      categories.Fast_Food,
+      categories.Burger,
+      categories.Asian,
+      categories.Breakfeast,
+      categories.Cake,
+      categories.Drink,
+      categories.Healthy,
+      categories.Meat,
+      categories.Mexican,
+      categories.Pasta,
+    ],
+    id: '1',
+    creationDate: '2021-07-08T18:25:43.511Z',
   },
   {
     images: [
@@ -64,7 +77,9 @@ export default [
       'Serve on toasted buns and top each with the beer-braised onions.',
     ],
     public: true,
-    categories: [Categories.Fast_Food, Categories.Burger],
+    categories: [categories.Fast_Food, categories.Burger],
+    id: '2',
+    creationDate: '2021-07-08T18:25:43.511Z',
   },
   {
     images: [
@@ -97,7 +112,9 @@ export default [
       'Serve on toasted buns and top each with the beer-braised onions.',
     ],
     public: true,
-    categories: [Categories.Fast_Food, Categories.Burger],
+    categories: [categories.Fast_Food, categories.Burger],
+    id: '3',
+    creationDate: '2021-07-08T18:25:43.511Z',
   },
   {
     images: [
@@ -130,7 +147,9 @@ export default [
       'Serve on toasted buns and top each with the beer-braised onions.',
     ],
     public: true,
-    categories: [Categories.Fast_Food, Categories.Burger],
+    categories: [categories.Fast_Food, categories.Burger],
+    id: '4',
+    creationDate: '2021-07-08T18:25:43.511Z',
   },
   {
     images: [
@@ -163,7 +182,9 @@ export default [
       'Serve on toasted buns and top each with the beer-braised onions.',
     ],
     public: true,
-    categories: [Categories.Fast_Food, Categories.Burger],
+    categories: [categories.Fast_Food, categories.Burger],
+    id: '5',
+    creationDate: '2021-07-08T18:25:43.511Z',
   },
   {
     images: [
@@ -196,6 +217,8 @@ export default [
       'Serve on toasted buns and top each with the beer-braised onions.',
     ],
     public: true,
-    categories: [Categories.Fast_Food, Categories.Burger],
+    categories: [categories.Fast_Food, categories.Burger],
+    id: '6',
+    creationDate: '2021-07-08T18:25:43.511Z',
   },
 ];
