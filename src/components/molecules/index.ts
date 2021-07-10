@@ -1,1 +1,1 @@
-export { default as IngredientFormField } from './IngredientFormField';
+export { default as IngredientFormField } from './IngredientFormField/IngredientFormField';
