@@ -5,9 +5,7 @@ import { Colors, Typography } from '_styles';
 import { ListItem } from '_atoms';
 import data from '../../data/userCookbook';
 
-interface Props {}
-
-const CookbookScreen = (props: Props) => {
+const CookbookScreen = ({ navigation: { navigate } }) => {
   return (
     <View style={s.screen}>
       <SafeAreaView style={s.whiteArea} />
@@ -22,7 +20,15 @@ const CookbookScreen = (props: Props) => {
             data={data}
             keyExtractor={item => item.id}
             renderItem={({ item }) => (
-              <ListItem imagePath={item.images[0]} {...item} />
+              <ListItem
+                imagePath={item.images[0]}
+                onPress={() =>
+                  navigate('PreviewScreen', {
+                    item,
+                  })
+                }
+                {...item}
+              />
             )}
             style={s.list}
             contentContainerStyle={s.listContainer}

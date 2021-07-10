@@ -1,11 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
-import {
-  SharedElement,
-  SharedElementTransition,
-  nodeFromRef,
-} from 'react-native-shared-element';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { Colors, Typography } from '_styles';
+import { CategoryIcon } from '_atoms';
 
 interface Props {
   imagePath: string;
@@ -13,6 +9,7 @@ interface Props {
   id: string;
   creationDate: string;
   categories: string[] | string;
+  onPress: () => void | undefined;
 }
 
 const ListItem = ({
@@ -21,35 +18,35 @@ const ListItem = ({
   id,
   categories,
   creationDate,
+  onPress,
 }: Props) => {
   return (
-    <View style={s.wrapper}>
-      <Image source={{ uri: imagePath }} style={s.image} resizeMode={'cover'} />
-      <View style={s.texts}>
-        <Text style={s.date}>
-          {new Date(creationDate).toLocaleDateString('en-US', {
-            month: 'short',
-            day: '2-digit',
-            year: 'numeric',
-          })}
-        </Text>
-        <Text style={s.title}>{title}</Text>
-        <View style={s.categories}>
-          {categories.map((c, index) => (
-            <View
-              style={[
-                s.category,
-                {
-                  backgroundColor: c.color,
-                  transform: [{ translateX: index * -4 }],
-                },
-              ]}>
-              <Text style={s.emoji}>{c.emote}</Text>
-            </View>
-          ))}
+    <TouchableOpacity
+      onPress={onPress}
+      activeOpacity={typeof onPress == 'undefined' ? 1 : 0.75}>
+      <View style={s.wrapper}>
+        <Image
+          source={{ uri: imagePath }}
+          style={s.image}
+          resizeMode={'cover'}
+        />
+        <View style={s.texts}>
+          <Text style={s.date}>
+            {new Date(creationDate).toLocaleDateString('en-US', {
+              month: 'short',
+              day: '2-digit',
+              year: 'numeric',
+            })}
+          </Text>
+          <Text style={s.title}>{title}</Text>
+          <View style={s.categories}>
+            {categories.map((c, index) => (
+              <CategoryIcon index={index} color={c.color} emote={c.emote} />
+            ))}
+          </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -62,7 +59,7 @@ const s = StyleSheet.create({
     flexDirection: 'row',
   },
   image: {
-    height: '100%',
+    height: 121,
     width: 90,
     borderRadius: 15,
     marginRight: 20,
@@ -80,17 +77,9 @@ const s = StyleSheet.create({
     ...Typography.FONT_MEDIUM,
     fontSize: Typography.FONT_SIZE_16,
     paddingTop: 2,
-    paddingBottom: 7 ,
+    paddingBottom: 7,
   },
   categories: {
     flexDirection: 'row',
   },
-  category: {
-    width: 22,
-    height: 22,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  emoji: { fontSize: 11 },
 });

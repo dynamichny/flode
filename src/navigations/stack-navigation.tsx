@@ -5,6 +5,7 @@ import {
 } from '@react-navigation/stack';
 
 import { BottomNavigation } from '_navigations';
+import { PreviewScreen } from '_scenes';
 
 const Stack = createStackNavigator();
 
@@ -19,6 +20,7 @@ export default function StackNavigation() {
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}>
       <Stack.Screen name="BottomNavigation" component={BottomNavigation} />
+      <Stack.Screen name="PreviewScreen" component={PreviewScreen} />
     </Stack.Navigator>
   );
 }
