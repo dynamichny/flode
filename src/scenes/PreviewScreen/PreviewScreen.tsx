@@ -5,24 +5,31 @@ import {
   View,
   Image,
   ScrollView,
+  FlatList,
   Dimensions,
   Animated,
+  TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Ionicon from 'react-native-vector-icons/Ionicons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import dataArray from '../../data/userCookbook';
 
-import { CategoryIcon, ActionIconWrapper } from '_atoms';
+import { CategoryIcon, ActionIconWrapper, Button } from '_atoms';
 import { Colors, Mixins, Typography } from '_styles';
 
 const WIDTH = Dimensions.get('window').width;
+const DOT_WIDTH = 10;
+
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 const PreviewScreen = props => {
   const data = useRef(
     dataArray.find(x => x.id === props.route.params.item.id),
   ).current;
   const scrollY = useRef(new Animated.Value(0)).current;
+  const caruseleX = useRef(new Animated.Value(0)).current;
   const insets = useSafeAreaInsets();
 
   return (
@@ -33,6 +40,8 @@ const PreviewScreen = props => {
         </ActionIconWrapper>
       </View>
       <Animated.ScrollView
+        bounces={false}
+        scrollEventThrottle={16}
         onScroll={Animated.event(
           [
             {
@@ -42,16 +51,82 @@ const PreviewScreen = props => {
           {
             useNativeDriver: false,
           },
-        )}>
-        <Animated.View style={[s.imageWrapper]}>
-          <Image
-            source={{ uri: data.images[0] }}
-            style={s.image}
-            resizeMode={'cover'}
+        )}
+        contentContainerStyle={{ paddingBottom: 100 }}>
+        <View style={s.imageWrapper}>
+          <View
+            style={[
+              s.indicatorWrapper,
+              {
+                top: insets.top + 20,
+              },
+            ]}>
+            {data?.images.map((_, index) => {
+              const inputRange = [
+                WIDTH * (index - 1),
+                WIDTH * index,
+                WIDTH * (index + 1),
+              ];
+              return (
+                <Animated.View
+                  style={[
+                    s.indicator,
+                    {
+                      opacity: caruseleX.interpolate({
+                        inputRange,
+                        outputRange: [0.5, 1, 0.5],
+                        extrapolate: 'clamp',
+                      }),
+                      transform: [
+                        {
+                          scale: caruseleX.interpolate({
+                            inputRange,
+                            outputRange: [0.5, 1, 0.5],
+                            extrapolate: 'clamp',
+                          }),
+                        },
+                      ],
+                    },
+                  ]}
+                />
+              );
+            })}
+          </View>
+          <AnimatedFlatList
+            scrollEventThrottle={16}
+            data={data.images}
+            keyExtractor={item => item}
+            snapToInterval={WIDTH}
+            decelerationRate={0}
+            horizontal={true}
+            bounces={false}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <Image
+                source={{ uri: item }}
+                style={s.image}
+                resizeMode={'cover'}
+              />
+            )}
+            onScroll={Animated.event(
+              [
+                {
+                  nativeEvent: {
+                    contentOffset: {
+                      x: caruseleX,
+                    },
+                  },
+                },
+              ],
+              {
+                useNativeDriver: true,
+              },
+            )}
           />
-        </Animated.View>
+        </View>
         <View style={s.introductionBox}>
-          <Text style={s.title}>{data.title}</Text>
+          <Text style={s.title}>{data?.title}</Text>
           <View style={s.belowTitleWrapper}>
             <View style={s.belowTitle}>
               <Icon
@@ -60,7 +135,7 @@ const PreviewScreen = props => {
                 color={Colors.PRIMARY}
               />
               <Text style={s.belowTitleText}>
-                {data.ingredients.length} składników
+                {data?.ingredients.length} składników
               </Text>
             </View>
             <View style={s.belowTitle}>
@@ -69,19 +144,64 @@ const PreviewScreen = props => {
                 size={14}
                 color={Colors.PRIMARY}
               />
-              <Text style={s.belowTitleText}>{data.steps.length} kroków</Text>
+              <Text style={s.belowTitleText}>{data?.steps.length} kroków</Text>
             </View>
           </View>
           <View style={s.categories}>
             {[...data.categories].slice(0, 5).map((c, index) => (
-              <CategoryIcon index={index} color={c.color} emote={c.emote} />
+              <CategoryIcon
+                key={`cat_${index}`}
+                index={index}
+                color={c.color}
+                emote={c.emote}
+              />
             ))}
             {data?.categories.length > 5 ? (
               <Text style={s.more}>+ {data?.categories.length - 5} więcej</Text>
             ) : null}
           </View>
         </View>
+        <View style={s.ingredientsWrapper}>
+          <View style={s.rowBetween}>
+            <Text style={s.sectionTitle}>Składniki</Text>
+            <TouchableOpacity
+              onPress={() =>
+                props.navigation.navigate('IngredientsCompletnessScreen', {
+                  list: data?.ingredients,
+                  steps: data?.steps,
+                  title: data?.title,
+                })
+              }>
+              <Text style={s.checkCompletnessText}>Sprawdź kompletność</Text>
+            </TouchableOpacity>
+          </View>
+          {data?.ingredients.map((item, index) => (
+            <View style={s.ingredientWrapper} key={`ingr_${index}`}>
+              <Text style={s.ingredientText}>{item.name}</Text>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={s.ingredientText}>{item.quantity}</Text>
+                <Text style={s.ingredientText}>{item.unit}</Text>
+              </View>
+            </View>
+          ))}
+        </View>
       </Animated.ScrollView>
+      <View style={s.bottomFixed}>
+        <ActionIconWrapper onPress={() => {}}>
+          <Ionicon name="share-outline" size={14} color={Colors.BLACK} />
+        </ActionIconWrapper>
+        <Button
+          label={'Przejdź do gotowania!'}
+          onPress={() =>
+            props.navigation.navigate('CookingScreen', {
+              steps: data?.steps,
+              title: data?.title,
+            })
+          }
+          fullWidth
+          style={{ flex: 1, marginLeft: 12 }}
+        />
+      </View>
     </View>
   );
 };
@@ -103,10 +223,11 @@ const s = StyleSheet.create({
     borderBottomRightRadius: 40,
     overflow: 'hidden',
     backgroundColor: 'transparent',
+    height: WIDTH,
   },
   image: {
     width: WIDTH,
-    height: 400,
+    height: '100%',
   },
   introductionBox: {
     backgroundColor: Colors.WHITE,
@@ -124,10 +245,16 @@ const s = StyleSheet.create({
     borderTopLeftRadius: 45,
     borderBottomRightRadius: 45,
     zIndex: 10,
+    marginBottom: -40,
   },
   title: {
     ...Typography.FONT_MEDIUM,
     fontSize: Typography.FONT_SIZE_20,
+    color: Colors.BLACK,
+  },
+  sectionTitle: {
+    ...Typography.FONT_MEDIUM,
+    fontSize: Typography.FONT_SIZE_18,
     color: Colors.BLACK,
   },
   belowTitle: {
@@ -153,5 +280,59 @@ const s = StyleSheet.create({
     ...Typography.FONT_LIGHT,
     color: Colors.BLACK,
     fontSize: Typography.FONT_SIZE_12,
+  },
+
+  indicatorWrapper: {
+    flexDirection: 'row',
+    position: 'absolute',
+    zIndex: 100,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  indicator: {
+    width: DOT_WIDTH,
+    height: DOT_WIDTH,
+    marginHorizontal: 8,
+    borderRadius: DOT_WIDTH / 2,
+    backgroundColor: Colors.WHITE,
+  },
+  ingredientsWrapper: {
+    marginHorizontal: 24,
+  },
+  ingredientWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    ...Mixins.boxShadow('#959da5', { height: 8, width: 0 }, 24, 0.1),
+    borderRadius: 8,
+    backgroundColor: Colors.WHITE,
+    padding: 12,
+    marginBottom: 8,
+  },
+  ingredientText: {
+    color: Colors.BLACK,
+    ...Typography.FONT_REGULAR,
+    fontSize: Typography.FONT_SIZE_14,
+  },
+  checkCompletnessText: {
+    ...Typography.FONT_LIGHT,
+    color: Colors.BLACK,
+    fontSize: Typography.FONT_SIZE_14,
+    textDecorationLine: 'underline',
+    textDecorationColor: Colors.BLACK_70,
+  },
+  rowBetween: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  bottomFixed: {
+    flexDirection: 'row',
+    padding: 20,
+    position: 'absolute',
+    bottom: 0,
   },
 });

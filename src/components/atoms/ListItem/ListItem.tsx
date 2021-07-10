@@ -41,7 +41,12 @@ const ListItem = ({
           <Text style={s.title}>{title}</Text>
           <View style={s.categories}>
             {categories.map((c, index) => (
-              <CategoryIcon index={index} color={c.color} emote={c.emote} />
+              <CategoryIcon
+                key={index}
+                index={index}
+                color={c.color}
+                emote={c.emote}
+              />
             ))}
           </View>
         </View>

@@ -1,9 +1,17 @@
-export const PRIMARY = '#94C4CB';
+export const PRIMARY = '#95C4CB';
 export const SECONDARY = '#FFC59C';
 export const TERTIARY = '#F8DA92';
 
 export const WHITE = '#FFFFFF';
 export const BLACK = '#000000';
+
+//WHITE /OPACITY
+export const WHITE_70 = '#FFFFFFB3';
+export const WHITE_50 = '#FFFFFF80';
+
+//BLACK /OPACITY
+export const BLACK_70 = '#000000B3';
+export const BLACK_50 = '#00000080';
 
 // ACTIONS
 export const SUCCESS = '#3adb76';

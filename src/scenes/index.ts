@@ -6,3 +6,5 @@ export { default as PreviewScreen } from './PreviewScreen/PreviewScreen';
 export { default as ProfileScreen } from './ProfileScreen/ProfileScreen';
 export { default as RegisterScreen } from './RegisterScreen/RegisgerScreen';
 export { default as SharedScreen } from './SharedScreen/SharedScreen';
+export { default as IngredientsCompletnessScreen } from './IngredientsCompletnessScreen/IngredientsCompletnessScreen';
+export { default as CookingScreen } from './CookingScreen/CookingScreen';

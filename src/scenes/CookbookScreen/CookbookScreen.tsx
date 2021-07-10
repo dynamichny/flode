@@ -12,10 +12,6 @@ const CookbookScreen = ({ navigation: { navigate } }) => {
       <SafeAreaView style={s.primaryArea}>
         <View style={s.wrapper}>
           <Text style={s.headerText}>Moje przepisy</Text>
-          <LinearGradient
-            colors={[Colors.WHITE, '#ffffff00']}
-            style={s.topGradient}
-          />
           <FlatList
             data={data}
             keyExtractor={item => item.id}
@@ -59,6 +55,7 @@ const s = StyleSheet.create({
     ...Typography.FONT_MEDIUM,
     fontSize: Typography.FONT_SIZE_SEMIHEADER,
     paddingHorizontal: 24,
+    marginTop: 10,
   },
   topGradient: {
     height: 100,
@@ -74,7 +71,6 @@ const s = StyleSheet.create({
     bottom: 0,
   },
   list: {
-    marginTop: -80,
     paddingHorizontal: 24,
   },
   listContainer: {

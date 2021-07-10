@@ -8,7 +8,11 @@ export default [
     ],
     title: 'Canadian Burger',
     ingredients: [
-      { name: 'butter', quantity: '14', unit: 'ml' },
+      {
+        name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+        quantity: '14',
+        unit: 'ml',
+      },
       { name: 'large onion', quantity: '1', unit: '' },
       { name: 'sugar', quantity: '14', unit: 'ml' },
       { name: 'ground beef', quantity: '680', unit: 'g' },
