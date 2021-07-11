@@ -69,6 +69,7 @@ const PreviewScreen = props => {
               ];
               return (
                 <Animated.View
+                  key={`indic_${index}`}
                   style={[
                     s.indicator,
                     {

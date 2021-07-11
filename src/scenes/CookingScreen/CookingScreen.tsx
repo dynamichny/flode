@@ -7,13 +7,12 @@ import {
   FlatList,
   Dimensions,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { ActionIconWrapper, Button } from '_atoms';
+import { Button } from '_atoms';
 import { ModalHeader } from '_molecules';
 import { Colors, Typography } from '_styles';
 
-const { height: HEIGHT } = Dimensions.get('screen');
+const HEIGHT = Dimensions.get('screen').height;
 const DOT_WIDTH = 10;
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
@@ -33,6 +32,8 @@ const CookingScreen = ({
   const stepsList = ['first', ...steps, 'last'];
 
   useEffect(() => {
+    setHeaderHeight(75);
+
     headerRef.current.measure((x, y, w, h) => {
       setHeaderHeight(h);
     });
@@ -54,6 +55,7 @@ const CookingScreen = ({
           ];
           return (
             <Animated.View
+              key={`pag_${index}`}
               style={[
                 s.pagination,
                 {
@@ -91,7 +93,7 @@ const CookingScreen = ({
                 <View
                   style={{
                     height: (HEIGHT - headerHeight) / 2 - stepHeight / 2,
-                    alignItems: 'center'
+                    alignItems: 'center',
                   }}>
                   <Button
                     label={'Zakończ'}

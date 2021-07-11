@@ -16,6 +16,8 @@ target 'Flode' do
 
   pod 'RNSharedElement', :path => '../node_modules/react-native-shared-element'
 
+  pod 'RNReactNativeHapticFeedback', :path => '../node_modules/react-native-haptic-feedback'
+
   target 'FlodeTests' do
     inherit! :complete
     # Pods for testing

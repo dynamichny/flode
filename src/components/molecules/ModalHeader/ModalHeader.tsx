@@ -12,7 +12,10 @@ interface Props {
 
 const ModalHeader = forwardRef((props, ref) => {
   return (
-    <View ref={ref} style={{ flexDirection: 'row' }}>
+    <View
+      ref={ref}
+      style={{ flexDirection: 'row' }}
+      renderToHardwareTextureAndroid={true}>
       <Text style={s.screenTitle}>{props.title}</Text>
       <ActionIconWrapper onPress={props.goBack} style={s.closeBtn}>
         <Icon name="window-close" size={18} color={Colors.BLACK} />
