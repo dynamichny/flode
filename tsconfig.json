@@ -25,6 +25,7 @@
       "_styles": ["src/styles"],
       "_utils": ["src/utils"],
       "_icons": ["src/assets/svgs"],
+      "_actions": ["src/store/actions/*"],
       "@/*": ["src/*"]
     }
   },

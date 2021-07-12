@@ -1,11 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, FlatList } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import { useSelector, useDispatch } from 'react-redux';
+import * as cookbookActions from '../../store/actions/cookbook';
+
 import { Colors, Typography } from '_styles';
 import { ListItem } from '_atoms';
 import data from '../../data/userCookbook';
 
+const selectUserId = state => state.auth.userId;
+
 const CookbookScreen = ({ navigation: { navigate } }) => {
+  const dispatch = useDispatch();
+  const userId = useSelector(selectUserId);
+
+  useState(() => {
+    dispatch(cookbookActions.getUserCollection());
+  }, []);
+
   return (
     <View style={s.screen}>
       <SafeAreaView style={s.whiteArea} />
