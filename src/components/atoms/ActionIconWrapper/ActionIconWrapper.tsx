@@ -1,12 +1,17 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import {
   StyleSheet,
-  Animated,
   GestureResponderEvent,
   View,
   TouchableWithoutFeedback,
 } from 'react-native';
 import { Colors } from '_styles';
+import Animated, {
+  useSharedValue,
+  withSpring,
+  useAnimatedStyle,
+  withTiming,
+} from 'react-native-reanimated';
 
 interface Props {
   children: React.ReactNode;
@@ -27,20 +32,21 @@ const ActionIconWrapper = ({
   activeBackgroundColor = Colors.PRIMARY,
   size = 50,
 }: Props) => {
-  const animValue = useRef(new Animated.Value(0)).current;
-  const animation = toValue =>
-    Animated.spring(animValue, {
-      toValue,
-      useNativeDriver: true,
-    });
+  const progress = useSharedValue(0);
+
   const animateInnerCircle = () => {
-    animation(0).stop();
-    animation(1).start();
+    progress.value = withSpring(1);
   };
   const releaseButton = () => {
-    animation(1).stop();
-    animation(0).start();
+    progress.value = withTiming(0);
   };
+  const circleStyle = useAnimatedStyle(() => ({
+    transform: [
+      {
+        scale: progress.value,
+      },
+    ],
+  }));
 
   return (
     <View
@@ -64,12 +70,8 @@ const ActionIconWrapper = ({
             backgroundColor: activeBackgroundColor,
             width: size,
             height: size,
-            transform: [
-              {
-                scale: animValue,
-              },
-            ],
           },
+          circleStyle,
         ]}
       />
     </View>

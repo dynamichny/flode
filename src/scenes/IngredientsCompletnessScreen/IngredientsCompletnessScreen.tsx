@@ -1,33 +1,26 @@
-import React, { useState, useEffect, useRef } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  Image,
-  Animated,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+} from 'react-native-reanimated';
 
 import { Colors, Typography } from '_styles';
-import { ActionIconWrapper, Button } from '_atoms';
+import { Button } from '_atoms';
 import { CompletnessListItem, ModalHeader } from '_molecules';
 
 const IngredientsCompletnessScreen = ({ navigation, route: { params } }) => {
   const [list, setList] = useState(() =>
     params.list.map(x => ({ ...x, checked: false })),
   );
-  const overlayOpacity = useRef(new Animated.Value(0)).current;
+  const overlayOpacity = useSharedValue(0);
   const [overlayVisible, setOverlayVisible] = useState(false);
 
   useEffect(() => {
     if (list.every(x => x.checked)) {
       setOverlayVisible(true);
-      Animated.timing(overlayOpacity, {
-        toValue: 1,
-        duration: 350,
-        useNativeDriver: true,
-      }).start();
+      overlayOpacity.value = withTiming(1);
     }
   }, [list]);
 
@@ -36,6 +29,10 @@ const IngredientsCompletnessScreen = ({ navigation, route: { params } }) => {
     tempList[index].checked = !tempList[index].checked;
     setList(tempList);
   };
+
+  const overlayStyle = useAnimatedStyle(() => ({
+    opacity: overlayOpacity.value,
+  }));
   return (
     <View style={s.screen}>
       <ModalHeader
@@ -57,13 +54,7 @@ const IngredientsCompletnessScreen = ({ navigation, route: { params } }) => {
         ))}
       </ScrollView>
       {overlayVisible && (
-        <Animated.View
-          style={[
-            s.overlay,
-            {
-              opacity: overlayOpacity,
-            },
-          ]}>
+        <Animated.View style={[s.overlay, overlayStyle]}>
           <Text style={s.overlayText}>
             Wygląda na to, że udało Ci się skompletować wszystkie potrzebne
             produkty!

@@ -1,11 +1,10 @@
 import React, { useEffect, useRef } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Animated,
-} from 'react-native';
+import { StyleSheet, Text, View, TouchableWithoutFeedback } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+} from 'react-native-reanimated';
 import { Colors, Typography } from '_styles';
 
 import { Checkbox } from '_atoms';
@@ -25,32 +24,20 @@ const CompletnessListItem = ({
   checked,
   onChange,
 }: Props) => {
-  const animValue = useRef(new Animated.Value(checked ? 1 : 0)).current;
+  const opacity = useSharedValue(checked ? 0.55 : 1);
   const nameRef = useRef(null);
 
-  const animate = toValue =>
-    Animated.timing(animValue, {
-      toValue,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
-
   useEffect(() => {
-    animate(checked ? 1 : 0);
+    opacity.value = withTiming(checked ? 0.55 : 1);
   }, [checked]);
 
+  const wrapperStyle = useAnimatedStyle(() => ({
+    opacity: opacity.value,
+  }));
+
   return (
-    <TouchableOpacity onPress={onChange} activeOpacity={0.75}>
-      <Animated.View
-        style={[
-          s.wrapper,
-          {
-            opacity: animValue.interpolate({
-              inputRange: [0, 1],
-              outputRange: [1, 0.55],
-            }),
-          },
-        ]}>
+    <TouchableWithoutFeedback onPress={onChange}>
+      <Animated.View style={[s.wrapper, wrapperStyle]}>
         <View style={s.section}>
           <Checkbox checked={checked} />
           <Text style={s.name} ref={nameRef}>
@@ -62,7 +49,7 @@ const CompletnessListItem = ({
           <Text style={s.quantityUnit}>{unit}</Text>
         </View>
       </Animated.View>
-    </TouchableOpacity>
+    </TouchableWithoutFeedback>
   );
 };
 

@@ -1,5 +1,11 @@
-import React, { useEffect, useRef } from 'react';
-import { StyleSheet, View, Animated } from 'react-native';
+import React, { useEffect } from 'react';
+import { StyleSheet, View } from 'react-native';
+import Animated, {
+  useSharedValue,
+  withTiming,
+  withDelay,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
 import { Colors } from '_styles';
 
 interface Props {
@@ -7,49 +13,26 @@ interface Props {
 }
 
 const SIZE = 25;
+const ACTIVE_HEIGHT = SIZE * 0.6;
 
 const Checkbox = ({ checked }: Props) => {
-  const boxOpacity = useRef(new Animated.Value(checked ? 1 : 0)).current;
-  const leftCheckmarkHeight = useRef(
-    new Animated.Value(checked ? SIZE * 0.6 : 0),
-  ).current;
-  const rightCheckmarkHeight = useRef(
-    new Animated.Value(checked ? SIZE * 0.6 : 0),
-  ).current;
-  const animateIn = () =>
-    Animated.parallel([
-      Animated.spring(boxOpacity, {
-        toValue: 1,
-        useNativeDriver: true,
-      }),
-      Animated.spring(leftCheckmarkHeight, {
-        toValue: SIZE * 0.6,
-        useNativeDriver: false,
-        delay: 200,
-      }),
-      Animated.spring(rightCheckmarkHeight, {
-        toValue: SIZE * 0.6,
-        useNativeDriver: false,
-        delay: 400,
-      }),
-    ]).start();
-  const animateOut = () =>
-    Animated.parallel([
-      Animated.timing(leftCheckmarkHeight, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: false,
-      }),
-      Animated.timing(rightCheckmarkHeight, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: false,
-      }),
-      Animated.spring(boxOpacity, {
-        toValue: 0,
-        useNativeDriver: true,
-      }),
-    ]).start();
+  const boxOpacity = useSharedValue(checked ? 1 : 0);
+  const leftCheckmarkHeight = useSharedValue(checked ? 1 : 0);
+  const rightCheckmarkHeight = useSharedValue(checked ? 1 : 0);
+
+  const animateIn = () => {
+    'worklets';
+    boxOpacity.value = withTiming(1);
+    leftCheckmarkHeight.value = withDelay(200, withTiming(ACTIVE_HEIGHT));
+    rightCheckmarkHeight.value = withDelay(400, withTiming(ACTIVE_HEIGHT));
+  };
+
+  const animateOut = () => {
+    'worklets';
+    boxOpacity.value = withTiming(0);
+    leftCheckmarkHeight.value = withDelay(200, withTiming(0));
+    rightCheckmarkHeight.value = withDelay(400, withTiming(0));
+  };
 
   useEffect(() => {
     if (checked) {
@@ -59,20 +42,29 @@ const Checkbox = ({ checked }: Props) => {
     }
   }, [checked]);
 
+  const leftStyle = useAnimatedStyle(() => ({
+    height: leftCheckmarkHeight.value,
+  }));
+  const rightStyle = useAnimatedStyle(() => ({
+    height: rightCheckmarkHeight.value,
+  }));
+  const checkmarkStyle = useAnimatedStyle(() => ({
+    opacity: boxOpacity.value,
+  }));
+
   return (
     <View style={s.checkbox}>
       <View style={s.checkmarkWrapper}>
         <Animated.View
           style={[
             s.checkmarkPart,
-            { transform: [{ rotate: '45deg' }], height: leftCheckmarkHeight },
+            { transform: [{ rotate: '45deg' }] },
+            leftStyle,
           ]}
         />
-        <Animated.View
-          style={[s.checkmarkPart, { height: rightCheckmarkHeight }]}
-        />
+        <Animated.View style={[s.checkmarkPart, rightStyle]} />
       </View>
-      <Animated.View style={[s.coloredBox, { opacity: boxOpacity }]} />
+      <Animated.View style={[s.coloredBox, checkmarkStyle]} />
     </View>
   );
 };
