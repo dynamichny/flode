@@ -1,18 +1,23 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, FlatList } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  FlatList,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import * as cookbookActions from '../../store/actions/cookbook';
 
 import { Colors, Typography } from '_styles';
-import { ListItem } from '_atoms';
+import { ListItem, Serchbar } from '_atoms';
 import data from '../../data/userCookbook';
-
-const selectUserId = state => state.auth.userId;
 
 const CookbookScreen = ({ navigation: { navigate } }) => {
   const dispatch = useDispatch();
-  const userId = useSelector(selectUserId);
 
   useState(() => {
     dispatch(cookbookActions.getUserCollection());
@@ -22,30 +27,33 @@ const CookbookScreen = ({ navigation: { navigate } }) => {
     <View style={s.screen}>
       <SafeAreaView style={s.whiteArea} />
       <SafeAreaView style={s.primaryArea}>
-        <View style={s.wrapper}>
-          <Text style={s.headerText}>Moje przepisy</Text>
-          <FlatList
-            data={data}
-            keyExtractor={item => item.id}
-            renderItem={({ item }) => (
-              <ListItem
-                imagePath={item.images[0]}
-                onPress={() =>
-                  navigate('PreviewScreen', {
-                    item,
-                  })
-                }
-                {...item}
-              />
-            )}
-            style={s.list}
-            contentContainerStyle={s.listContainer}
-          />
-          <LinearGradient
-            colors={['#ffffff00', Colors.PRIMARY]}
-            style={s.bottomGradient}
-          />
-        </View>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={s.wrapper}>
+            <Serchbar placeholder="Szukaj wśród przepisów..." />
+            <Text style={s.headerText}>Moje przepisy</Text>
+            <FlatList
+              data={data}
+              keyExtractor={item => item.id}
+              renderItem={({ item }) => (
+                <ListItem
+                  imagePath={item.images[0]}
+                  onPress={() =>
+                    navigate('PreviewScreen', {
+                      item,
+                    })
+                  }
+                  {...item}
+                />
+              )}
+              style={s.list}
+              contentContainerStyle={s.listContainer}
+            />
+            <LinearGradient
+              colors={['#ffffff00', Colors.PRIMARY]}
+              style={s.bottomGradient}
+            />
+          </View>
+        </TouchableWithoutFeedback>
       </SafeAreaView>
     </View>
   );
@@ -61,6 +69,7 @@ const s = StyleSheet.create({
     flex: 1,
     position: 'relative',
     backgroundColor: Colors.WHITE,
+    paddingTop: 10,
   },
   headerText: {
     color: Colors.BLACK,
@@ -84,9 +93,10 @@ const s = StyleSheet.create({
   },
   list: {
     paddingHorizontal: 24,
+    marginTop: 10,
   },
   listContainer: {
-    paddingTop: 20,
+    paddingTop: 0,
     paddingBottom: 80,
   },
   primaryArea: {
