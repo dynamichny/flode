@@ -9,12 +9,12 @@ export const FONT_FAMILY_SEMIBOLD = 'Poppins-SemiBold';
 export const FONT_FAMILY_BOLD = 'Poppins-Bold';
 
 // FONT WEIGHT
-export const FONT_WEIGHT_EXTRALIGHT = '200';
-export const FONT_WEIGHT_LIGHT = '300';
-export const FONT_WEIGHT_REGULAR = '400';
-export const FONT_WEIGHT_MEDIUM = '500';
-export const FONT_WEIGHT_SEMIBOLD = '600';
-export const FONT_WEIGHT_BOLD = '700';
+export const FONT_WEIGHT_EXTRALIGHT = '200' as const;
+export const FONT_WEIGHT_LIGHT = '300' as const;
+export const FONT_WEIGHT_REGULAR = '400' as const;
+export const FONT_WEIGHT_MEDIUM = '500' as const;
+export const FONT_WEIGHT_SEMIBOLD = '600' as const;
+export const FONT_WEIGHT_BOLD = '700' as const;
 
 // FONT SIZE
 export const FONT_SIZE_20 = scaleFont(20);
