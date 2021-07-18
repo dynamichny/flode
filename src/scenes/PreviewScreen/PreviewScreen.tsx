@@ -3,10 +3,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
-  ScrollView,
-  FlatList,
-  Dimensions,
   Animated,
   TouchableOpacity,
 } from 'react-native';
@@ -14,22 +10,12 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import dataArray from '../../data/userCookbook';
-
 import { CategoryIcon, ActionIconWrapper, Button } from '_atoms';
+import { ImagesWithPageing } from '_molecules';
 import { Colors, Mixins, Typography } from '_styles';
 
-const WIDTH = Dimensions.get('window').width;
-const DOT_WIDTH = 10;
-
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
-
 const PreviewScreen = props => {
-  const data = useRef(
-    dataArray.find(x => x.id === props.route.params.item.id),
-  ).current;
-  const scrollY = useRef(new Animated.Value(0)).current;
-  const caruseleX = useRef(new Animated.Value(0)).current;
+  const data = useRef(props.route.params.item).current;
   const insets = useSafeAreaInsets();
 
   return (
@@ -42,90 +28,11 @@ const PreviewScreen = props => {
       <Animated.ScrollView
         bounces={false}
         scrollEventThrottle={16}
-        onScroll={Animated.event(
-          [
-            {
-              nativeEvent: { contentOffset: { y: scrollY } },
-            },
-          ],
-          {
-            useNativeDriver: false,
-          },
-        )}
         contentContainerStyle={{ paddingBottom: 100 }}>
-        <View style={s.imageWrapper}>
-          <View
-            style={[
-              s.indicatorWrapper,
-              {
-                top: insets.top + 20,
-              },
-            ]}>
-            {data?.images.map((_, index) => {
-              const inputRange = [
-                WIDTH * (index - 1),
-                WIDTH * index,
-                WIDTH * (index + 1),
-              ];
-              return (
-                <Animated.View
-                  key={`indic_${index}`}
-                  style={[
-                    s.indicator,
-                    {
-                      opacity: caruseleX.interpolate({
-                        inputRange,
-                        outputRange: [0.5, 1, 0.5],
-                        extrapolate: 'clamp',
-                      }),
-                      transform: [
-                        {
-                          scale: caruseleX.interpolate({
-                            inputRange,
-                            outputRange: [0.5, 1, 0.5],
-                            extrapolate: 'clamp',
-                          }),
-                        },
-                      ],
-                    },
-                  ]}
-                />
-              );
-            })}
-          </View>
-          <AnimatedFlatList
-            scrollEventThrottle={16}
-            data={data.images}
-            keyExtractor={item => item}
-            snapToInterval={WIDTH}
-            decelerationRate={0}
-            horizontal={true}
-            bounces={false}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <Image
-                source={{ uri: item }}
-                style={s.image}
-                resizeMode={'cover'}
-              />
-            )}
-            onScroll={Animated.event(
-              [
-                {
-                  nativeEvent: {
-                    contentOffset: {
-                      x: caruseleX,
-                    },
-                  },
-                },
-              ],
-              {
-                useNativeDriver: true,
-              },
-            )}
-          />
-        </View>
+        <ImagesWithPageing
+          images={data.images}
+          indicatorTop={insets.top + 20}
+        />
         <View style={s.introductionBox}>
           <Text style={s.title}>{data?.title}</Text>
           <View style={s.belowTitleWrapper}>
@@ -219,17 +126,7 @@ const s = StyleSheet.create({
     zIndex: 10,
     paddingHorizontal: 20,
   },
-  imageWrapper: {
-    borderBottomLeftRadius: 40,
-    borderBottomRightRadius: 40,
-    overflow: 'hidden',
-    backgroundColor: 'transparent',
-    height: WIDTH,
-  },
-  image: {
-    width: WIDTH,
-    height: '100%',
-  },
+
   introductionBox: {
     backgroundColor: Colors.WHITE,
     paddingVertical: 25,
@@ -283,22 +180,6 @@ const s = StyleSheet.create({
     fontSize: Typography.FONT_SIZE_12,
   },
 
-  indicatorWrapper: {
-    flexDirection: 'row',
-    position: 'absolute',
-    zIndex: 100,
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  indicator: {
-    width: DOT_WIDTH,
-    height: DOT_WIDTH,
-    marginHorizontal: 8,
-    borderRadius: DOT_WIDTH / 2,
-    backgroundColor: Colors.WHITE,
-  },
   ingredientsWrapper: {
     marginHorizontal: 24,
   },
