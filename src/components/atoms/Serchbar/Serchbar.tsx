@@ -16,12 +16,11 @@ import { ExploreIcon } from '_icons';
 interface Props {
   placeholder: string;
   value: string;
-  onChangeText: () => void;
-  onBlur: () => void;
+  onChangeText: (text: string) => void;
 }
 
 const Serchbar = ({ placeholder, value, onChangeText, ...rest }: Props) => {
-  const inputRef = useRef(null);
+  const inputRef = useRef<TextInput>(null);
   const progress = useSharedValue(Colors.GRAY_LIGHT);
   const [isFocus, setIsFocus] = useState(false);
 
@@ -34,7 +33,7 @@ const Serchbar = ({ placeholder, value, onChangeText, ...rest }: Props) => {
   }));
 
   return (
-    <TouchableWithoutFeedback onPress={() => inputRef.current.focus()}>
+    <TouchableWithoutFeedback onPress={() => inputRef.current?.focus()}>
       <Animated.View style={[s.wrapper, wrapperStyle]}>
         <View style={s.icon}>
           <ExploreIcon color={Colors.GRAY_LIGHT} height={20} />
@@ -46,7 +45,7 @@ const Serchbar = ({ placeholder, value, onChangeText, ...rest }: Props) => {
           onChangeText={onChangeText}
           placeholder={placeholder}
           placeholderTextColor={Colors.GRAY_MEDIUM}
-          onBlur={e => {
+          onBlur={() => {
             setIsFocus(false);
           }}
           onFocus={() => setIsFocus(true)}

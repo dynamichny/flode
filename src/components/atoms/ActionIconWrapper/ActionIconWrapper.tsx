@@ -4,6 +4,7 @@ import {
   GestureResponderEvent,
   View,
   TouchableWithoutFeedback,
+  ViewStyle,
 } from 'react-native';
 import { Colors } from '_styles';
 import Animated, {
@@ -16,7 +17,7 @@ import Animated, {
 interface Props {
   children: React.ReactNode;
   onPress: (event: GestureResponderEvent) => void;
-  style?: any;
+  style?: ViewStyle;
   backgroundColor?: string;
   borderColor?: string;
   activeBackgroundColor?: string;

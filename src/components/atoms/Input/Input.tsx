@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-native/no-inline-styles */
 import React, { useRef, useState, useEffect } from 'react';
 import {
   StyleSheet,
@@ -5,14 +7,19 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   Animated,
+  ViewStyle,
 } from 'react-native';
+
 import { Colors, Typography } from '_styles';
 
 interface Props {
   label: string;
   value: string;
-  onChangeText: () => void;
-  onBlur: () => void;
+  onChangeText: (e: string | React.ChangeEvent<any>) => void;
+  onBlur: (e: any) => void;
+  style?: ViewStyle;
+  smaller?: boolean;
+  placeholder?: boolean;
 }
 
 enum AnimationState {
@@ -20,12 +27,24 @@ enum AnimationState {
   PLACEHOLDER = 1,
 }
 
-const Input = ({ label, value, onChangeText, onBlur, ...rest }: Props) => {
-  const inputRef = useRef(null);
-  const [isFocus, setIsFocus] = useState(false);
+const Input = ({
+  label,
+  value,
+  onChangeText,
+  onBlur,
+  style,
+  smaller = false,
+  placeholder = true,
+  ...rest
+}: Props) => {
+  const inputRef = useRef<TextInput>(null);
+  const [isFocus, setIsFocus] = useState(!placeholder);
   const animValue = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
+    if (!placeholder) {
+      return;
+    }
     if (isFocus) {
       animateLabel(AnimationState.LABEL);
     } else if (value.length === 0 && !isFocus) {
@@ -36,35 +55,39 @@ const Input = ({ label, value, onChangeText, onBlur, ...rest }: Props) => {
   const animateLabel = (toValue: AnimationState) => {
     Animated.spring(animValue, {
       toValue,
-      duration: 350,
       useNativeDriver: false,
     }).start();
   };
 
-  useEffect(() => {
-    console.log(value);
-  }, [value]);
   return (
-    <TouchableWithoutFeedback onPress={() => inputRef.current.focus()}>
-      <View style={s.wrapper}>
+    <TouchableWithoutFeedback onPress={() => inputRef.current?.focus()}>
+      <View style={[s.wrapper, { borderBottomWidth: smaller ? 1 : 2 }, style]}>
         <Animated.Text
           style={[
             s.label,
             {
               fontSize: animValue.interpolate({
                 inputRange: [0, 1],
-                outputRange: [12, 20],
+                outputRange: [12, smaller ? 16 : 20],
               }),
               bottom: animValue.interpolate({
                 inputRange: [0, 1],
-                outputRange: [50, 15],
+                outputRange: [smaller ? 36 : 50, 15],
               }),
+              left: placeholder ? 8 : 0,
             },
           ]}>
           {label}
         </Animated.Text>
         <TextInput
-          style={s.textinput}
+          style={[
+            s.textinput,
+            {
+              fontSize: smaller ? 16 : 22,
+              paddingVertical: smaller ? 6 : 12,
+              paddingHorizontal: smaller ? 4 : 8,
+            },
+          ]}
           ref={inputRef}
           value={value}
           onChangeText={onChangeText}
@@ -84,14 +107,12 @@ export default Input;
 
 const s = StyleSheet.create({
   wrapper: {
-    borderBottomWidth: 2,
     borderBottomColor: Colors.BLACK,
   },
   label: {
     color: Colors.BLACK,
     ...Typography.FONT_REGULAR,
     position: 'absolute',
-    left: 8,
   },
   textinput: {
     paddingVertical: 12,

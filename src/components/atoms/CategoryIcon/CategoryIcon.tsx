@@ -6,9 +6,10 @@ interface Props {
   index: number;
   color: string;
   emote: string;
+  border?: boolean;
 }
 
-const CategoryIcon = ({ index, color, emote }: Props) => {
+const CategoryIcon = ({ index, color, emote, border = true }: Props) => {
   return (
     <View
       key={index}
@@ -17,6 +18,7 @@ const CategoryIcon = ({ index, color, emote }: Props) => {
         {
           backgroundColor: color,
           transform: [{ translateX: index * -7 }],
+          borderWidth: border ? 2 : 0,
         },
       ]}>
       <Text style={s.emoji}>{emote}</Text>

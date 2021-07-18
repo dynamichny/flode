@@ -1,88 +1,194 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   StyleSheet,
-  Text,
   View,
   TouchableWithoutFeedback,
   Keyboard,
+  ScrollView,
+  Text,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import * as cookbookActions from '../../store/actions/cookbook';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import { Colors, Typography } from '_styles';
-import { ActionIconWrapper, ImagePicker, Input } from '_atoms';
+import { Input, Button, ActionIconWrapper, StepCreateTextarea } from '_atoms';
+import { ModalHeader, IngredientFormField, CategoryCheckbox } from '_molecules';
+import { ImagePicker } from '_organisms';
 
 import { Formik, FieldArray } from 'formik';
-import * as Yup from 'yup';
 
-interface Props {}
+const selectCategories = state => state.categories.items;
 
-const CreateScreen = (props: Props) => {
-  const [image, setImage] = useState('');
+const CreateScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const categories = useSelector(selectCategories);
+
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : null}
+      style={{ flex: 1 }}>
       <View style={s.wrapper}>
-        <View>
-          <ActionIconWrapper
-            onPress={() => props.navigation.goBack()}
-            borderColor={Colors.WHITE}
-            style={s.closeButton}>
-            <Icon name="window-close" size={18} color={Colors.BLACK} />
-          </ActionIconWrapper>
-          <Text style={s.headerText}>Dodaj przepis</Text>
-        </View>
-        <ImagePicker image={image} parseImage={setImage} />
-
-        <Formik
-          initialValues={{
-            title: '',
-            ingredients: [{ name: '', quantity: '' }],
-            steps: [''],
-            public: true,
-            protips: '',
-            categories: [],
-          }}
-          onSubmit={values => console.log(values)}>
-          {({ handleChange, handleBlur, handleSubmit, values }) => (
-            <>
-              <View style={s.form}>
-                <Input
-                  label="Tytuł"
-                  onChangeText={handleChange('title')}
-                  onBlur={handleBlur('title')}
-                  value={values.title}
+        <ModalHeader
+          title={'Dodaj przepis'}
+          goBack={() => navigation.goBack()}
+        />
+        <ScrollView contentContainerStyle={s.scrollView}>
+          <Formik
+            initialValues={{
+              images: [],
+              title: '',
+              ingredients: [
+                {
+                  name: '',
+                  quantity: '',
+                  unit: '',
+                  key: `ing_${String(Math.random())}`,
+                },
+              ],
+              steps: [{ value: '', key: `step_${String(Math.random())}` }],
+              public: true,
+              categories: [],
+            }}
+            onSubmit={values => {
+              // TODO: validate fields, min 1 step, min 1 ingredient, title, min 1 image
+              dispatch(cookbookActions.addItem(values)).then(() => {
+                navigation.goBack();
+              });
+            }}>
+            {({
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              setFieldValue,
+              values,
+            }) => (
+              <>
+                <ImagePicker
+                  images={values.images}
+                  parseImages={nextValue => setFieldValue('images', nextValue)}
                 />
-              </View>
+                <TouchableWithoutFeedback
+                  onPress={Keyboard.dismiss}
+                  accessible={false}>
+                  <View style={{ flex: 1 }}>
+                    <View style={s.form}>
+                      <Input
+                        label="Tytuł"
+                        onChangeText={handleChange('title')}
+                        onBlur={handleBlur('title')}
+                        value={values.title}
+                      />
+                    </View>
 
-              <FieldArray name="ingredients">
-                {({ push, remove }) => (
-                  <View style={s.ingredients}>
-                    <Text style={s.areaTitle}>Składniki</Text>
-                    {values.ingredients.map((ingredient, index) => (
-                      <View style={s.ingredient}>
-                        <Input
-                          label="Nazwa"
-                          onChangeText={handleChange(`ingredients[${index}].name`)}
-                          onBlur={handleBlur(`ingredients[${index}].name`)}
-                          value={ingredient.name}
-                        />
-                        <Input
-                          label="Ilosc"
-                          onChangeText={handleChange(`ingredients[${index}].quantity`)}
-                          onBlur={handleBlur(`ingredients[${index}].quantity`)}
-                          value={ingredient.quantity}
-                        />
-                      </View>
-                    ))}
+                    <FieldArray name="ingredients">
+                      {({ push, remove }) => (
+                        <View style={s.section}>
+                          <Text style={s.sectionTitle}>Składniki</Text>
+                          {values.ingredients.map((ingredient, index) => (
+                            <IngredientFormField
+                              ingredient={ingredient}
+                              index={index}
+                              key={ingredient.key}
+                              handleBlur={handleBlur}
+                              handleChange={handleChange}
+                              handleRemove={() => {
+                                remove(index);
+                              }}
+                            />
+                          ))}
+                          <ActionIconWrapper
+                            onPress={() =>
+                              push({
+                                name: '',
+                                quantity: '',
+                                unit: '',
+                                key: `ing_${String(Math.random())}`,
+                              })
+                            }
+                            style={s.appendButton}>
+                            <Icon name="plus" size={18} color={Colors.BLACK} />
+                          </ActionIconWrapper>
+                        </View>
+                      )}
+                    </FieldArray>
+                    <FieldArray name="steps">
+                      {({ push, remove }) => (
+                        <View style={s.section}>
+                          <Text style={s.sectionTitle}>Kroki wykonania</Text>
+                          {values.steps.map((step, index) => (
+                            <StepCreateTextarea
+                              value={step.value}
+                              index={index}
+                              key={step.key}
+                              handleChange={handleChange(
+                                `steps[${index}].value`,
+                              )}
+                              handleRemove={() => remove(index)}
+                            />
+                          ))}
+                          <ActionIconWrapper
+                            onPress={() =>
+                              push({
+                                value: '',
+                                key: `step_${String(Math.random())}`,
+                              })
+                            }
+                            style={s.appendButton}>
+                            <Icon name="plus" size={18} color={Colors.BLACK} />
+                          </ActionIconWrapper>
+                        </View>
+                      )}
+                    </FieldArray>
+                    <FieldArray name="categories">
+                      {({ push, remove }) => (
+                        <View style={s.section}>
+                          <Text style={s.sectionTitle}>Kategorie</Text>
+                          <View style={s.categories}>
+                            {categories.map((category, index) => (
+                              <CategoryCheckbox
+                                checked={values.categories.find(
+                                  id => id === category.id,
+                                )}
+                                onPress={() => {
+                                  if (
+                                    values.categories.find(
+                                      id => id === category.id,
+                                    )
+                                  ) {
+                                    remove(
+                                      values.categories.findIndex(
+                                        id => id == category.id,
+                                      ),
+                                    );
+                                  } else {
+                                    push(category.id);
+                                  }
+                                }}
+                                category={category}
+                                key={category.id}
+                              />
+                            ))}
+                          </View>
+                        </View>
+                      )}
+                    </FieldArray>
+
+                    <Button
+                      label={'Dodaj'}
+                      onPress={handleSubmit}
+                      style={{ marginHorizontal: 20 }}
+                    />
                   </View>
-                )}
-              </FieldArray>
-              {/*<ActionIconWrapper onPress={handleSubmit}>
-                <Icon name="file-send-outline" size={18} color={Colors.BLACK} />
-              </ActionIconWrapper> */}
-            </>
-          )}
-        </Formik>
+                </TouchableWithoutFeedback>
+              </>
+            )}
+          </Formik>
+        </ScrollView>
       </View>
-    </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -111,18 +217,32 @@ const s = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 24,
   },
-  ingredients: {
-    marginHorizontal: 8,
-    backgroundColor: Colors.PRIMARY,
-    borderRadius: 25,
-    paddingVertical: 22,
+  section: {
+    paddingVertical: 14,
+    paddingBottom: 70,
+  },
+  sectionTitle: {
+    ...Typography.FONT_REGULAR,
+    fontSize: Typography.FONT_SIZE_20,
+    textDecorationLine: 'underline',
+    textDecorationColor: Colors.PRIMARY,
+    textDecorationStyle: 'dotted',
+    marginHorizontal: 24,
+    marginBottom: 10,
+  },
+  scrollView: {
+    paddingBottom: 50,
+  },
+  appendButton: {
+    position: 'absolute',
+    right: 24,
+    bottom: 14,
+  },
+  categories: {
+    flexDirection: 'row',
     paddingHorizontal: 14,
-    minHeight: 300,
+    flexWrap: 'wrap',
+    alignItems: 'stretch',
+    justifyContent: 'center',
   },
-  areaTitle: {
-    ...Typography.FONT_MEDIUM,
-    fontSize: Typography.FONT_SIZE_SEMIHEADER,
-  },
-  ingredient: {
-  }
 });
