@@ -1,4 +1,4 @@
-import { CookbookActions } from '../actions/cookbook';
+import { CategoriesActions } from '../actions/categories';
 
 const initialValues = {
   items: [],
@@ -6,7 +6,7 @@ const initialValues = {
 
 export default (state = initialValues, actions) => {
   switch (actions.type) {
-    case CookbookActions.GET_LIST:
+    case CategoriesActions.GET_CATEGORIES:
       return {
         ...state,
         items: actions.data,

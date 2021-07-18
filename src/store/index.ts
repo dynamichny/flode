@@ -4,10 +4,12 @@ import thunk from 'redux-thunk';
 
 import authReducer from './reducers/auth';
 import cookbookReducer from './reducers/cookbook';
+import categoriesReducer from './reducers/categories';
 
 const appReducer = combineReducers({
   auth: authReducer,
   cookbook: cookbookReducer,
+  categories: categoriesReducer,
 });
 
 const rootReducer = (state, action) => {
