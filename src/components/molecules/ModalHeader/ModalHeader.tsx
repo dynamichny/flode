@@ -10,19 +10,18 @@ interface Props {
   goBack: () => void;
 }
 
-const ModalHeader = forwardRef((props, ref) => {
-  return (
-    <View
-      ref={ref}
-      style={{ flexDirection: 'row' }}
-      renderToHardwareTextureAndroid={true}>
-      <Text style={s.screenTitle}>{props.title}</Text>
-      <ActionIconWrapper onPress={props.goBack} style={s.closeBtn}>
-        <Icon name="window-close" size={18} color={Colors.BLACK} />
-      </ActionIconWrapper>
-    </View>
-  );
-});
+const ModalHeader = forwardRef(
+  ({ title, goBack }: Props, ref: React.ForwardedRef<View>) => {
+    return (
+      <View ref={ref} style={s.row} renderToHardwareTextureAndroid={true}>
+        <Text style={s.screenTitle}>{title}</Text>
+        <ActionIconWrapper onPress={goBack} style={s.closeBtn}>
+          <Icon name="window-close" size={18} color={Colors.BLACK} />
+        </ActionIconWrapper>
+      </View>
+    );
+  },
+);
 
 export default ModalHeader;
 
@@ -36,8 +35,9 @@ const s = StyleSheet.create({
   },
   closeBtn: {
     position: 'absolute',
-    top: 24,
+    top: 15,
     right: 24,
     zIndex: 100,
   },
+  row: { flexDirection: 'row' },
 });

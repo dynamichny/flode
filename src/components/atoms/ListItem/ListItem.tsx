@@ -1,30 +1,71 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withSpring,
+} from 'react-native-reanimated';
 import { Colors, Typography } from '_styles';
 import { CategoryIcon } from '_atoms';
+
+const HEIGHT = 135;
+
+interface Category {
+  name: string;
+  emote: string;
+  id: string;
+  color: string;
+}
 
 interface Props {
   imagePath: string;
   title: string;
-  id: string;
   creationDate: string;
-  categories: string[] | string;
+  categories: Category[];
   onPress: () => void | undefined;
+  index: number;
 }
 
 const ListItem = ({
   imagePath,
   title,
-  id,
   categories,
   creationDate,
   onPress,
+  index,
 }: Props) => {
+  const opacity = useSharedValue(0);
+  const offsetY = useSharedValue((index - 1) * HEIGHT);
+  const [prevousIndex, setPrevousIndex] = useState(index);
+
+  useEffect(() => {
+    opacity.value = withTiming(1, { duration: 500 });
+    if (index === prevousIndex) {
+      offsetY.value = HEIGHT / 3;
+    } else {
+      offsetY.value = HEIGHT * (prevousIndex - index);
+    }
+    offsetY.value = withSpring(0, {
+      damping: 20,
+    });
+    setPrevousIndex(index);
+  }, [index]);
+
+  const wrapperStyle = useAnimatedStyle(() => ({
+    opacity: opacity.value,
+    transform: [
+      {
+        translateY: offsetY.value,
+      },
+    ],
+  }));
+
   return (
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={typeof onPress == 'undefined' ? 1 : 0.75}>
-      <View style={s.wrapper}>
+      <Animated.View style={[s.wrapper, wrapperStyle]}>
         <Image
           source={{ uri: imagePath }}
           style={s.image}
@@ -40,7 +81,7 @@ const ListItem = ({
           </Text>
           <Text style={s.title}>{title}</Text>
           <View style={s.categories}>
-            {categories.map((c, index) => (
+            {categories.map((c: Category, index: number) => (
               <CategoryIcon
                 key={index}
                 index={index}
@@ -50,7 +91,7 @@ const ListItem = ({
             ))}
           </View>
         </View>
-      </View>
+      </Animated.View>
     </TouchableOpacity>
   );
 };
@@ -59,7 +100,7 @@ export default ListItem;
 
 const s = StyleSheet.create({
   wrapper: {
-    height: 135,
+    height: HEIGHT,
     paddingVertical: 12,
     flexDirection: 'row',
   },

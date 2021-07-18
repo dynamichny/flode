@@ -26,7 +26,7 @@ const CookingScreen = ({
   },
 }: Props) => {
   const scrollY = useRef(new Animated.Value(0)).current;
-  const headerRef = useRef(null);
+  const headerRef = useRef<View>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
   const stepHeight = 240;
   const stepsList = ['first', ...steps, 'last'];
@@ -34,7 +34,7 @@ const CookingScreen = ({
   useEffect(() => {
     setHeaderHeight(75);
 
-    headerRef.current.measure((x, y, w, h) => {
+    headerRef.current?.measure((x, y, w, h) => {
       setHeaderHeight(h);
     });
   }, []);

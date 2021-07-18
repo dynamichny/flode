@@ -2,12 +2,16 @@ import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { CookbookScreen, CreateScreen } from '_scenes';
+import { CookbookScreen } from '_scenes';
 import { ExploreNavigation } from '_navigations';
 import { Colors, Mixins } from '_styles';
 import { CookbookIcon, ExploreIcon, CreateIcon } from '_icons';
 
 const Tab = createBottomTabNavigator();
+
+const NotCreate = () => {
+  return <View />;
+};
 
 export default function BottomNavigation() {
   return (
@@ -50,17 +54,13 @@ export default function BottomNavigation() {
       />
       <Tab.Screen
         name="Create"
-        component={CreateScreen} //TODO: Change to screen which sugest to crate new repecpie
+        component={NotCreate} //TODO: Change to screen which sugest to crate new repecpie
         options={({ navigation }) => ({
-          tabBarIcon: ({ focused }) => (
+          tabBarButton: () => (
             <TouchableOpacity
               style={s.iconWrapper}
               onPress={() => navigation.navigate('CreateModal')}>
-              <CreateIcon
-                color={focused ? Colors.PRIMARY : Colors.GRAY_MEDIUM}
-                height={32}
-                width={32}
-              />
+              <CreateIcon color={Colors.GRAY_DARK} height={75} width={75} />
             </TouchableOpacity>
           ),
         })}
@@ -86,7 +86,7 @@ export default function BottomNavigation() {
 
 const s = StyleSheet.create({
   iconWrapper: {
-    height: 80,
+    height: 65,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 0,
