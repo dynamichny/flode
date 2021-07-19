@@ -27,7 +27,7 @@ const ImagePicker = ({ parseImages, images }: Props) => {
         mediaType: 'photo',
         includeBase64: true,
         selectionLimit: 5,
-        quality: 0.9,
+        quality: 0.7,
       },
       (response: ImagePickerResponse) => {
         if (response.didCancel) {

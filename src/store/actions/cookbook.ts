@@ -1,6 +1,8 @@
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 
+import { randomId } from '_utils';
+
 import * as categoriesActions from './categories';
 
 export enum CookbookActions {
@@ -50,13 +52,32 @@ export const getUserCollection =
 export const addItem = data => async (dispatch, getState) => {
   const user_id = getState().auth.userId;
   try {
-    //const storageRef = storage().ref();
     // TODO: change steps obj[] to str[]
     // TODO: handle images upload
+    const storageRef = storage().ref();
+    const images_urls = await Promise.all(
+      data.images.map(async (base64: string) => {
+        const name = `${randomId()}.jpg`;
+        const fileRef = storageRef.child(`images/${name}`);
+        await fileRef.putString(
+          base64.replace('data:image/png;base64,', ''),
+          'base64',
+        );
+        const imagePath = await fileRef.getDownloadURL();
+        return imagePath;
+      }),
+    );
     await firestore()
       .collection('cookbooks')
       .add({
         ...data,
+        images: images_urls,
+        ingredients: data.ingredients.map(ingredient => ({
+          name: ingredient.name,
+          quantity: ingredient.quantity,
+          unit: ingredient.unit,
+        })),
+        steps: data.steps.map(step => step.value),
         creationDate: new Date().toJSON(),
         user_id,
       });

@@ -99,10 +99,9 @@ const CreateScreen = ({ navigation }) => {
               categories: [],
             }}
             onSubmit={values => {
-              /* dispatch(cookbookActions.addItem(values)).then(() => {
+              dispatch(cookbookActions.addItem(values)).then(() => {
                 navigation.goBack();
-              }); */
-              console.log(values);
+              });
             }}
             validationSchema={validationSchema}>
             {({
