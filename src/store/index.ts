@@ -5,11 +5,13 @@ import thunk from 'redux-thunk';
 import authReducer from './reducers/auth';
 import cookbookReducer from './reducers/cookbook';
 import categoriesReducer from './reducers/categories';
+import exploreReducer from './reducers/explore';
 
 const appReducer = combineReducers({
   auth: authReducer,
   cookbook: cookbookReducer,
   categories: categoriesReducer,
+  explore: exploreReducer,
 });
 
 const rootReducer = (state, action) => {

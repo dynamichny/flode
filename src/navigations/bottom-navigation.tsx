@@ -2,8 +2,7 @@ import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { CookbookScreen } from '_scenes';
-import { ExploreNavigation } from '_navigations';
+import { CookbookScreen, ExploreScreen } from '_scenes';
 import { Colors, Mixins } from '_styles';
 import { CookbookIcon, ExploreIcon, CreateIcon } from '_icons';
 
@@ -39,7 +38,7 @@ export default function BottomNavigation() {
       }}>
       <Tab.Screen
         name="Explore"
-        component={ExploreNavigation}
+        component={ExploreScreen}
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={s.iconWrapper}>

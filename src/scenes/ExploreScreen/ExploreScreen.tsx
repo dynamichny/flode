@@ -1,16 +1,114 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  FlatList,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import { useDispatch, useSelector } from 'react-redux';
+import * as exploreActions from '../../store/actions/explore';
 
-interface Props {}
+import { Colors, Typography } from '_styles';
+import { ListItem } from '_atoms';
 
-const ExploreScreen = (props: Props) => {
+const selectExoloreItems = state => state.explore.items;
+
+const ExploreScreen = ({ navigation: { navigate } }) => {
+  const dispatch = useDispatch();
+  const data = useSelector(selectExoloreItems);
+
+  useEffect(() => {
+    dispatch(exploreActions.getItems());
+  }, []);
+
   return (
-    <View>
-      <Text></Text>
+    <View style={s.screen}>
+      <SafeAreaView style={s.whiteArea} />
+      <SafeAreaView style={s.primaryArea}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={s.wrapper}>
+            <Text style={s.headerText}>Przeglądaj udostępnione przepisy</Text>
+            <FlatList
+              data={data}
+              keyExtractor={item => item.id}
+              renderItem={({ item, index }) => (
+                <ListItem
+                  imagePath={item.images[0]}
+                  title={item.title}
+                  creationDate={item.creationDate}
+                  categories={item.categories}
+                  onPress={() =>
+                    navigate('PreviewScreen', {
+                      item,
+                    })
+                  }
+                  index={index}
+                />
+              )}
+              style={s.list}
+              contentContainerStyle={s.listContainer}
+            />
+            <LinearGradient
+              colors={['#ffffff00', Colors.PRIMARY]}
+              style={s.bottomGradient}
+            />
+          </View>
+        </TouchableWithoutFeedback>
+      </SafeAreaView>
     </View>
   );
 };
 
 export default ExploreScreen;
 
-const styles = StyleSheet.create({});
+const s = StyleSheet.create({
+  screen: {
+    flex: 1,
+  },
+  wrapper: {
+    flex: 1,
+    position: 'relative',
+    backgroundColor: Colors.WHITE,
+    paddingTop: 10,
+  },
+  headerText: {
+    color: Colors.BLACK,
+    ...Typography.FONT_MEDIUM,
+    fontSize: Typography.FONT_SIZE_SEMIHEADER,
+    paddingHorizontal: 24,
+    marginTop: 10,
+  },
+  topGradient: {
+    height: 100,
+    width: '100%',
+    transform: [{ translateY: 20 }],
+    zIndex: 10,
+  },
+  bottomGradient: {
+    height: 150,
+    width: '100%',
+    zIndex: 10,
+    position: 'absolute',
+    bottom: 0,
+  },
+  list: {
+    paddingHorizontal: 24,
+    marginTop: 10,
+  },
+  listContainer: {
+    paddingTop: 0,
+    paddingBottom: 80,
+  },
+  primaryArea: {
+    flex: 1,
+    backgroundColor: Colors.PRIMARY,
+  },
+  whiteArea: {
+    flex: 0,
+    backgroundColor: Colors.WHITE,
+  },
+});
