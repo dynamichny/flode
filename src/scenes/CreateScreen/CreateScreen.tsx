@@ -19,8 +19,54 @@ import { ModalHeader, IngredientFormField, CategoryCheckbox } from '_molecules';
 import { ImagePicker } from '_organisms';
 
 import { Formik, FieldArray } from 'formik';
+import * as Yup from 'yup';
 
 const selectCategories = state => state.categories.items;
+
+const validationSchema = Yup.object({
+  title: Yup.string().required('Tytuł przepisu jest wymagany.'),
+  images: Yup.array().min(1, 'Wymagane jest przynajmniej jedno zdjęcie').max(5),
+  ingredients: Yup.array()
+    .min(1, 'Wymagany jest co najmniej jeden składnik.')
+    .of(
+      Yup.lazy((item, options) => {
+        const itemIndex = options.from[0].value.ingredients.findIndex(
+          x => x.key == item.key,
+        );
+        return itemIndex === 0
+          ? Yup.object().shape({
+              name: Yup.string().required(
+                'Wymagany jest przynajmniej jeden składnik.',
+              ),
+              quantity: Yup.string(),
+              unit: Yup.string(),
+            })
+          : Yup.object().shape({
+              name: Yup.string(),
+              quantity: Yup.string(),
+              unit: Yup.string(),
+            });
+      }),
+    ),
+  steps: Yup.array()
+    .min(1, 'Wymagany jest co najmniej jeden składnik.')
+    .of(
+      Yup.lazy((item, options) => {
+        const itemIndex = options.from[0].value.steps.findIndex(
+          x => x.key == item.key,
+        );
+        return itemIndex === 0
+          ? Yup.object().shape({
+              value: Yup.string().required(
+                'Wymagany jest przynajmniej jeden krok wykonania.',
+              ),
+            })
+          : Yup.object().shape({
+              value: Yup.string(),
+            });
+      }),
+    ),
+});
 
 const CreateScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -53,23 +99,31 @@ const CreateScreen = ({ navigation }) => {
               categories: [],
             }}
             onSubmit={values => {
-              // TODO: validate fields, min 1 step, min 1 ingredient, title, min 1 image
-              dispatch(cookbookActions.addItem(values)).then(() => {
+              /* dispatch(cookbookActions.addItem(values)).then(() => {
                 navigation.goBack();
-              });
-            }}>
+              }); */
+              console.log(values);
+            }}
+            validationSchema={validationSchema}>
             {({
               handleChange,
               handleBlur,
               handleSubmit,
               setFieldValue,
               values,
+              errors,
+              touched,
             }) => (
               <>
                 <ImagePicker
                   images={values.images}
                   parseImages={nextValue => setFieldValue('images', nextValue)}
                 />
+                {errors.images && touched.images ? (
+                  <View style={s.validationMessageWrapper}>
+                    <Text style={s.validationMessage}>{errors.images}</Text>
+                  </View>
+                ) : null}
                 <TouchableWithoutFeedback
                   onPress={Keyboard.dismiss}
                   accessible={false}>
@@ -81,6 +135,9 @@ const CreateScreen = ({ navigation }) => {
                         onBlur={handleBlur('title')}
                         value={values.title}
                       />
+                      {errors.title && touched.title ? (
+                        <Text style={s.validationMessage}>{errors.title}</Text>
+                      ) : null}
                     </View>
 
                     <FieldArray name="ingredients">
@@ -88,16 +145,27 @@ const CreateScreen = ({ navigation }) => {
                         <View style={s.section}>
                           <Text style={s.sectionTitle}>Składniki</Text>
                           {values.ingredients.map((ingredient, index) => (
-                            <IngredientFormField
-                              ingredient={ingredient}
-                              index={index}
-                              key={ingredient.key}
-                              handleBlur={handleBlur}
-                              handleChange={handleChange}
-                              handleRemove={() => {
-                                remove(index);
-                              }}
-                            />
+                            <>
+                              <IngredientFormField
+                                ingredient={ingredient}
+                                index={index}
+                                key={ingredient.key}
+                                handleBlur={handleBlur}
+                                handleChange={handleChange}
+                                handleRemove={() => {
+                                  remove(index);
+                                }}
+                              />
+                              {errors.ingredients &&
+                              errors.ingredients[index] &&
+                              touched.ingredients ? (
+                                <View style={s.validationMessageWrapper}>
+                                  <Text style={s.validationMessage}>
+                                    {errors.ingredients[index].name}
+                                  </Text>
+                                </View>
+                              ) : null}
+                            </>
                           ))}
                           <ActionIconWrapper
                             onPress={() =>
@@ -111,23 +179,44 @@ const CreateScreen = ({ navigation }) => {
                             style={s.appendButton}>
                             <Icon name="plus" size={18} color={Colors.BLACK} />
                           </ActionIconWrapper>
+                          {errors.ingredients &&
+                          typeof errors.ingredients == 'string' &&
+                          touched.ingredients ? (
+                            <View style={s.validationMessageWrapper}>
+                              <Text style={s.validationMessage}>
+                                {errors.ingredients}
+                              </Text>
+                            </View>
+                          ) : null}
                         </View>
                       )}
                     </FieldArray>
+
                     <FieldArray name="steps">
                       {({ push, remove }) => (
                         <View style={s.section}>
                           <Text style={s.sectionTitle}>Kroki wykonania</Text>
                           {values.steps.map((step, index) => (
-                            <StepCreateTextarea
-                              value={step.value}
-                              index={index}
-                              key={step.key}
-                              handleChange={handleChange(
-                                `steps[${index}].value`,
-                              )}
-                              handleRemove={() => remove(index)}
-                            />
+                            <>
+                              <StepCreateTextarea
+                                value={step.value}
+                                index={index}
+                                key={step.key}
+                                handleChange={handleChange(
+                                  `steps[${index}].value`,
+                                )}
+                                handleRemove={() => remove(index)}
+                              />
+                              {errors.steps &&
+                              errors.steps[index] &&
+                              touched.steps ? (
+                                <View style={s.validationMessageWrapper}>
+                                  <Text style={s.validationMessage}>
+                                    {errors.steps[index].value}
+                                  </Text>
+                                </View>
+                              ) : null}
+                            </>
                           ))}
                           <ActionIconWrapper
                             onPress={() =>
@@ -139,6 +228,15 @@ const CreateScreen = ({ navigation }) => {
                             style={s.appendButton}>
                             <Icon name="plus" size={18} color={Colors.BLACK} />
                           </ActionIconWrapper>
+                          {errors.steps &&
+                          typeof errors.steps == 'string' &&
+                          touched.steps ? (
+                            <View style={s.validationMessageWrapper}>
+                              <Text style={s.validationMessage}>
+                                {errors.steps}
+                              </Text>
+                            </View>
+                          ) : null}
                         </View>
                       )}
                     </FieldArray>
@@ -244,5 +342,14 @@ const s = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'stretch',
     justifyContent: 'center',
+  },
+  validationMessage: {
+    color: Colors.ALERT,
+    paddingTop: 5,
+    fontSize: Typography.FONT_SIZE_12,
+    ...Typography.FONT_REGULAR,
+  },
+  validationMessageWrapper: {
+    paddingHorizontal: 24,
   },
 });
