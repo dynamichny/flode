@@ -16,9 +16,11 @@ const Button = ({
   style,
   textColor = Colors.WHITE,
   fullWidth = false,
+  ...rest
 }: Props) => {
   return (
     <TouchableOpacity
+      {...rest}
       onPress={onPress}
       activeOpacity={0.75}
       style={fullWidth ? { flex: 1 } : {}}>

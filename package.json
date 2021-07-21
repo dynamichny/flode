@@ -6,7 +6,7 @@
     "android": "react-native run-android",
     "ios": "npx react-native run-ios",
     "start": "npx react-native start",
-    "test": "jest --verbose --coverage",
+    "test": "jest",
     "test:update": "jest --verbose --coverage --updateSnapshot",
     "test:watch": "jest --verbose --watch",
     "coverage": "jest --verbose --coverage && open ./coverage/lcov-report/index.html",

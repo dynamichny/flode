@@ -80,6 +80,7 @@ const Input = ({
           {label}
         </Animated.Text>
         <TextInput
+          {...rest}
           style={[
             s.textinput,
             {
@@ -96,7 +97,6 @@ const Input = ({
             return onBlur(e);
           }}
           onFocus={() => setIsFocus(true)}
-          {...{ rest }}
         />
       </View>
     </TouchableWithoutFeedback>
