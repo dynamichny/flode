@@ -32,6 +32,7 @@ const ActionIconWrapper = ({
   borderColor = Colors.WHITE,
   activeBackgroundColor = Colors.PRIMARY,
   size = 50,
+  ...rest
 }: Props) => {
   const progress = useSharedValue(0);
 
@@ -59,7 +60,8 @@ const ActionIconWrapper = ({
       <TouchableWithoutFeedback
         {...{ onPress }}
         onPressIn={animateInnerCircle}
-        onPressOut={releaseButton}>
+        onPressOut={releaseButton}
+        {...rest}>
         <View style={[s.circle, { width: size, height: size }]}>
           {children}
         </View>

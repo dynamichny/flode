@@ -6,6 +6,11 @@ module.exports = {
       babelConfig: true,
     },
   },
+  setupFiles: [
+    './jest/setup.js',
+    './node_modules/react-native-gesture-handler/jestSetup.js',
+  ],
+  setupFilesAfterEnv: ['@testing-library/jest-native/extend-expect'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
     '^~/(.*)$': '<rootDir>/$1',

@@ -1,4 +1,6 @@
-const mock = jest.requireMock('react-native-reanimated');
+import 'react-native';
+
+const mock = jest.requireMock('react-native-reanimated/mock');
 jest.mock('react-native-reanimated', () => {
   return {
     ...mock,
@@ -6,3 +8,5 @@ jest.mock('react-native-reanimated', () => {
     useAnimatedStyle: jest.fn,
   };
 });
+
+global.__reanimatedWorkletInit = jest.fn();
