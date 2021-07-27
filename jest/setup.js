@@ -6,6 +6,8 @@ jest.mock('react-native-reanimated', () => {
     ...mock,
     useSharedValue: jest.fn,
     useAnimatedStyle: jest.fn,
+    withTiming: jest.fn,
+    withDelay: jest.fn,
   };
 });
 
