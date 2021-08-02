@@ -6,8 +6,10 @@ import {
 
 import { BottomNavigation } from '_navigations';
 import { PreviewScreen } from '_scenes';
+import { StackNavigatorParamsList } from '_types';
+import { StackRoutes } from '_types';
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<StackNavigatorParamsList>();
 
 export default function StackNavigation() {
   return (
@@ -19,8 +21,14 @@ export default function StackNavigation() {
         gestureDirection: 'horizontal',
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}>
-      <Stack.Screen name="BottomNavigation" component={BottomNavigation} />
-      <Stack.Screen name="PreviewScreen" component={PreviewScreen} />
+      <Stack.Screen
+        name={StackRoutes.BottomNavigation}
+        component={BottomNavigation}
+      />
+      <Stack.Screen
+        name={StackRoutes.PreviewScreen}
+        component={PreviewScreen}
+      />
     </Stack.Navigator>
   );
 }

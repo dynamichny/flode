@@ -5,8 +5,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { CookbookScreen, ExploreScreen } from '_scenes';
 import { Colors, Mixins } from '_styles';
 import { CookbookIcon, ExploreIcon, CreateIcon } from '_icons';
+import { BottomNavigatorParamsList } from '_types';
+import { BottomRoutes, RootRoutes } from '_types';
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<BottomNavigatorParamsList>();
 
 const NotCreate = () => {
   return <View />;
@@ -15,7 +17,7 @@ const NotCreate = () => {
 export default function BottomNavigation() {
   return (
     <Tab.Navigator
-      initialRouteName="Cookbook"
+      initialRouteName={BottomRoutes.CookbookScreen}
       tabBarOptions={{
         showLabel: false,
         style: {
@@ -37,7 +39,7 @@ export default function BottomNavigation() {
         safeAreaInsets: { bottom: 0 },
       }}>
       <Tab.Screen
-        name="Explore"
+        name={BottomRoutes.ExploreScreen}
         component={ExploreScreen}
         options={{
           tabBarIcon: ({ focused }) => (
@@ -52,20 +54,20 @@ export default function BottomNavigation() {
         }}
       />
       <Tab.Screen
-        name="Create"
+        name={BottomRoutes.NotScreen}
         component={NotCreate} //TODO: Change to screen which sugest to crate new repecpie
         options={({ navigation }) => ({
           tabBarButton: () => (
             <TouchableOpacity
               style={s.iconWrapper}
-              onPress={() => navigation.navigate('CreateModal')}>
+              onPress={() => navigation.navigate(RootRoutes.CreateModal)}>
               <CreateIcon color={Colors.GRAY_DARK} height={75} width={75} />
             </TouchableOpacity>
           ),
         })}
       />
       <Tab.Screen
-        name="Cookbook"
+        name={BottomRoutes.CookbookScreen}
         component={CookbookScreen}
         options={{
           tabBarIcon: ({ focused }) => (

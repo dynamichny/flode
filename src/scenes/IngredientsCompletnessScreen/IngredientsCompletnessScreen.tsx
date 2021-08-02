@@ -5,12 +5,23 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 import { Colors, Typography } from '_styles';
+import { RootRoutes, RootNavigatorParamsList } from '_types';
 import { Button } from '_atoms';
 import { CompletnessListItem, ModalHeader } from '_molecules';
+export interface IngredientsCompletnessScreenProps {
+  navigation: StackNavigationProp<
+    RootNavigatorParamsList,
+    RootRoutes.IngredientsCompletnessScreen
+  >;
+}
 
-const IngredientsCompletnessScreen = ({ navigation, route: { params } }) => {
+const IngredientsCompletnessScreen = ({
+  navigation,
+  route: { params },
+}: IngredientsCompletnessScreenProps) => {
   const [list, setList] = useState(() =>
     params.list.map(x => ({ ...x, checked: false })),
   );

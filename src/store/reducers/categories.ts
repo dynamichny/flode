@@ -1,7 +1,10 @@
 import { CategoriesActions } from '../actions/categories';
+import { Category } from '_types';
 
 const initialValues = {
   items: [],
+} as {
+  items: Category[];
 };
 
 export default (state = initialValues, actions) => {

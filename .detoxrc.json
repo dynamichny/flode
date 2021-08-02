@@ -5,7 +5,8 @@
   "apps": {
     "ios": {
       "type": "ios.app",
-      "binaryPath": "SPECIFY_PATH_TO_YOUR_APP_BINARY"
+      "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/Flode.app",
+      "build": "xcodebuild -workspace ios/Flode.xcworkspace -scheme Flode -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build"
     },
     "android": {
       "type": "android.apk",

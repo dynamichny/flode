@@ -10,7 +10,8 @@
     "test:update": "jest --verbose --coverage --updateSnapshot",
     "test:watch": "jest --verbose --watch",
     "coverage": "jest --verbose --coverage && open ./coverage/lcov-report/index.html",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "e2e:ios": "detox build --configuration ios && detox test --configuration ios"
   },
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.11",
@@ -22,9 +23,11 @@
     "@react-navigation/stack": "^5.14.5",
     "@testing-library/jest-native": "^4.0.1",
     "@testing-library/react-native": "^7.2.0",
+    "@types/react-redux": "^7.1.18",
     "formik": "^2.2.9",
     "react": "17.0.1",
     "react-native": "0.64.2",
+    "react-native-fast-image": "^8.3.7",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-image-picker": "^4.0.4",
     "react-native-linear-gradient": "^2.5.6",
@@ -56,6 +59,7 @@
     "eslint-import-resolver-babel-module": "^5.1.0",
     "eslint-plugin-import": "^2.18.2",
     "jest": "^26.6.3",
+    "jest-circus": "^27.0.6",
     "jest-transform-stub": "^2.0.0",
     "metro-react-native-babel-preset": "^0.64.0",
     "react-navigation": "^4.3.7",

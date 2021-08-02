@@ -10,8 +10,11 @@ import {
   CookingScreen,
 } from '_scenes';
 import { StackNavigation } from '_navigations';
+import { RootNavigatorParamsList } from '_types';
+import { RootRoutes } from '_types';
 
-const RootStack = createStackNavigator();
+const RootStack = createStackNavigator<RootNavigatorParamsList>();
+
 export default function RootNavigation() {
   return (
     <RootStack.Navigator
@@ -24,11 +27,17 @@ export default function RootNavigation() {
           ...TransitionPresets.ModalPresentationIOS,
         };
       }}>
-      <RootStack.Screen name={'Stack'} component={StackNavigation} />
-      <RootStack.Screen name={'CreateModal'} component={CreateScreen} />
-      <RootStack.Screen name={'CookingScreen'} component={CookingScreen} />
+      <RootStack.Screen name={RootRoutes.Stack} component={StackNavigation} />
       <RootStack.Screen
-        name={'IngredientsCompletnessScreen'}
+        name={RootRoutes.CreateModal}
+        component={CreateScreen}
+      />
+      <RootStack.Screen
+        name={RootRoutes.CookingScreen}
+        component={CookingScreen}
+      />
+      <RootStack.Screen
+        name={RootRoutes.IngredientsCompletnessScreen}
         component={IngredientsCompletnessScreen}
       />
     </RootStack.Navigator>

@@ -9,11 +9,14 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 import * as cookbookActions from '../../store/actions/cookbook';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { StackNavigationProp } from '@react-navigation/stack';
 
+import { RootNavigatorParamsList, RootRoutes } from '_types';
 import { Colors, Typography } from '_styles';
+import { useAppDispatch, useAppSelector } from '_hooks';
+import { RootState } from '_store';
 import { Input, Button, ActionIconWrapper, StepCreateTextarea } from '_atoms';
 import { ModalHeader, IngredientFormField, CategoryCheckbox } from '_molecules';
 import { ImagePicker } from '_organisms';
@@ -21,7 +24,14 @@ import { ImagePicker } from '_organisms';
 import { Formik, FieldArray } from 'formik';
 import * as Yup from 'yup';
 
-const selectCategories = state => state.categories.items;
+export interface CreateScreenProps {
+  navigation: StackNavigationProp<
+    RootNavigatorParamsList,
+    RootRoutes.CreateModal
+  >;
+}
+
+const selectCategories = (state: RootState) => state.categories.items;
 
 const validationSchema = Yup.object({
   title: Yup.string().required('Tytuł przepisu jest wymagany.'),
@@ -29,6 +39,7 @@ const validationSchema = Yup.object({
   ingredients: Yup.array()
     .min(1, 'Wymagany jest co najmniej jeden składnik.')
     .of(
+      //@ts-ignore
       Yup.lazy((item, options) => {
         const itemIndex = options.from[0].value.ingredients.findIndex(
           x => x.key == item.key,
@@ -51,6 +62,7 @@ const validationSchema = Yup.object({
   steps: Yup.array()
     .min(1, 'Wymagany jest co najmniej jeden składnik.')
     .of(
+      //@ts-ignore
       Yup.lazy((item, options) => {
         const itemIndex = options.from[0].value.steps.findIndex(
           x => x.key == item.key,
@@ -68,9 +80,9 @@ const validationSchema = Yup.object({
     ),
 });
 
-const CreateScreen = ({ navigation }) => {
-  const dispatch = useDispatch();
-  const categories = useSelector(selectCategories);
+const CreateScreen = ({ navigation }: CreateScreenProps) => {
+  const dispatch = useAppDispatch();
+  const categories = useAppSelector(selectCategories);
 
   return (
     <KeyboardAvoidingView

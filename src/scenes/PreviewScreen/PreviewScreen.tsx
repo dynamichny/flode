@@ -9,19 +9,33 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { StackScreenProps } from '@react-navigation/stack';
 
 import { CategoryIcon, ActionIconWrapper, Button } from '_atoms';
 import { ImagesWithPageing } from '_molecules';
 import { Colors, Mixins, Typography } from '_styles';
+import { StackNavigatorParamsList, StackRoutes } from '_types';
 
-const PreviewScreen = props => {
-  const data = useRef(props.route.params.item).current;
+export interface PreviewScreenProps {
+  navigation: StackScreenProps<
+    StackNavigatorParamsList,
+    StackRoutes.PreviewScreen
+  >;
+}
+
+const PreviewScreen = ({
+  navigation,
+  route: {
+    params: { item },
+  },
+}: PreviewScreenProps) => {
+  const data = useRef(item).current;
   const insets = useSafeAreaInsets();
 
   return (
     <View style={s.wrapper}>
       <View style={[s.headerButtons, { paddingTop: insets.top + 10 }]}>
-        <ActionIconWrapper onPress={() => props.navigation.goBack()}>
+        <ActionIconWrapper onPress={() => navigation.goBack()}>
           <Icon name="keyboard-backspace" size={14} color={Colors.BLACK} />
         </ActionIconWrapper>
       </View>

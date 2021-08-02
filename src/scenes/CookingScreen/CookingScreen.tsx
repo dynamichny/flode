@@ -7,7 +7,9 @@ import {
   FlatList,
   Dimensions,
 } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
+import { RootNavigatorParamsList, RootRoutes } from '_types';
 import { Button } from '_atoms';
 import { ModalHeader } from '_molecules';
 import { Colors, Typography } from '_styles';
@@ -17,14 +19,19 @@ const DOT_WIDTH = 10;
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
-interface Props {}
+export interface CookingScreenProps {
+  navigation: StackNavigationProp<
+    RootNavigatorParamsList,
+    RootRoutes.CookingScreen
+  >;
+}
 
 const CookingScreen = ({
   navigation,
   route: {
     params: { title, steps },
   },
-}: Props) => {
+}: CookingScreenProps) => {
   const scrollY = useRef(new Animated.Value(0)).current;
   const headerRef = useRef<View>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
@@ -85,8 +92,8 @@ const CookingScreen = ({
         decelerationRate={0}
         bounces={false}
         data={stepsList}
-        keyExtractor={item => item}
-        renderItem={({ item, index }) => {
+        keyExtractor={(item: string) => item}
+        renderItem={({ item, index }: { item: string; index: number }) => {
           if (['first', 'last'].includes(item)) {
             if (item == 'last') {
               return (

@@ -16,9 +16,12 @@
           "_scenes": "./src/scenes",
           "_services": "./src/services",
           "_styles": "./src/styles",
+          "_store": "./src/store",
           "_utils": "./src/utils",
           "_icons": "./src/assets/svgs",
-          "_actions": "./src/store/actions"
+          "_actions": "./src/store/actions",
+          "_hooks": "./src/hooks",
+          "_types": "./src/types",
         }
       }
     ]

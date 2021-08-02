@@ -9,17 +9,27 @@ import {
   Keyboard,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { useDispatch, useSelector } from 'react-redux';
 import * as cookbookActions from '../../store/actions/cookbook';
+import { StackNavigationProp } from '@react-navigation/stack';
 
+import { BottomNavigatorParamsList, BottomRoutes, StackRoutes } from '_types';
 import { Colors, Typography } from '_styles';
+import { useAppDispatch, useAppSelector } from '_hooks';
+import { RootState } from '_store';
 import { ListItem, Serchbar } from '_atoms';
 
-const selectCookbookItems = state => state.cookbook.items;
+export interface CookbookScreenProps {
+  navigation: StackNavigationProp<
+    BottomNavigatorParamsList,
+    BottomRoutes.CookbookScreen
+  >;
+}
 
-const CookbookScreen = ({ navigation: { navigate } }) => {
-  const dispatch = useDispatch();
-  const data = useSelector(selectCookbookItems);
+const selectCookbookItems = (state: RootState) => state.cookbook.items;
+
+const CookbookScreen = ({ navigation: { navigate } }: CookbookScreenProps) => {
+  const dispatch = useAppDispatch();
+  const data = useAppSelector(selectCookbookItems);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
@@ -37,7 +47,9 @@ const CookbookScreen = ({ navigation: { navigate } }) => {
               value={query}
               onChangeText={text => setQuery(text)}
             />
-            <Text style={s.headerText}>Moje przepisy</Text>
+            <Text style={s.headerText} testID={'cookbookTitle'}>
+              Moje przepisy
+            </Text>
             <FlatList
               data={data}
               keyExtractor={item => item.id}
@@ -48,7 +60,8 @@ const CookbookScreen = ({ navigation: { navigate } }) => {
                   creationDate={item.creationDate}
                   categories={item.categories}
                   onPress={() =>
-                    navigate('PreviewScreen', {
+                    //@ts-ignore
+                    navigate(StackRoutes.PreviewScreen, {
                       item,
                     })
                   }

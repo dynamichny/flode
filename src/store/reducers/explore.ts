@@ -1,7 +1,10 @@
 import { ExploreActions } from '../actions/explore';
+import { Recepie } from '_types';
 
 const initialValues = {
   items: [],
+} as {
+  items: Recepie[];
 };
 
 export default (state = initialValues, actions) => {

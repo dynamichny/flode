@@ -9,17 +9,29 @@ import {
   Keyboard,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { useDispatch, useSelector } from 'react-redux';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { BottomNavigatorParamsList } from '_types';
 import * as exploreActions from '../../store/actions/explore';
 
 import { Colors, Typography } from '_styles';
+import { useAppDispatch, useAppSelector } from '_hooks';
+import { RootState } from '_store';
 import { ListItem } from '_atoms';
+import { Recepie } from '_types';
+import { StackRoutes, BottomRoutes } from '_types';
 
-const selectExoloreItems = state => state.explore.items;
+export interface ExploreScreenProps {
+  navigation: StackNavigationProp<
+    BottomNavigatorParamsList,
+    BottomRoutes.ExploreScreen
+  >;
+}
 
-const ExploreScreen = ({ navigation: { navigate } }) => {
-  const dispatch = useDispatch();
-  const data = useSelector(selectExoloreItems);
+const selectExoloreItems = (state: RootState) => state.explore.items;
+
+const ExploreScreen = ({ navigation: { navigate } }: ExploreScreenProps) => {
+  const dispatch = useAppDispatch();
+  const data = useAppSelector(selectExoloreItems);
 
   useEffect(() => {
     dispatch(exploreActions.getItems());
@@ -34,15 +46,22 @@ const ExploreScreen = ({ navigation: { navigate } }) => {
             <Text style={s.headerText}>Przeglądaj udostępnione przepisy</Text>
             <FlatList
               data={data}
-              keyExtractor={item => item.id}
-              renderItem={({ item, index }) => (
+              keyExtractor={(item: Recepie) => item.id}
+              renderItem={({
+                item,
+                index,
+              }: {
+                item: Recepie;
+                index: number;
+              }) => (
                 <ListItem
                   imagePath={item.images[0]}
                   title={item.title}
                   creationDate={item.creationDate}
                   categories={item.categories}
                   onPress={() =>
-                    navigate('PreviewScreen', {
+                    //@ts-ignore
+                    navigate(StackRoutes.PreviewScreen, {
                       item,
                     })
                   }

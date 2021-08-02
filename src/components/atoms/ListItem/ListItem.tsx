@@ -6,6 +6,7 @@ import Animated, {
   withTiming,
   withSpring,
 } from 'react-native-reanimated';
+import FastImage from 'react-native-fast-image';
 import { Colors, Typography } from '_styles';
 import { CategoryIcon } from '_atoms';
 
@@ -66,10 +67,10 @@ const ListItem = ({
       onPress={onPress}
       activeOpacity={typeof onPress == 'undefined' ? 1 : 0.75}>
       <Animated.View style={[s.wrapper, wrapperStyle]}>
-        <Image
+        <FastImage
           source={{ uri: imagePath }}
           style={s.image}
-          resizeMode={'cover'}
+          resizeMode={FastImage.resizeMode.cover}
         />
         <View style={s.texts}>
           <Text style={s.date}>

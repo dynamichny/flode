@@ -1,12 +1,6 @@
 import React, { useRef } from 'react';
-import {
-  StyleSheet,
-  View,
-  Image,
-  Dimensions,
-  FlatList,
-  Animated,
-} from 'react-native';
+import { StyleSheet, View, Dimensions, FlatList, Animated } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 import { Colors } from '_styles';
 
@@ -76,7 +70,11 @@ const ImagesWithPageing = ({ images, indicatorTop = 20 }: Props) => {
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
-          <Image source={{ uri: item }} style={s.image} resizeMode={'cover'} />
+          <FastImage
+            source={{ uri: item }}
+            style={s.image}
+            resizeMode={FastImage.resizeMode.cover}
+          />
         )}
         onScroll={Animated.event(
           [

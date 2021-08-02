@@ -4,6 +4,7 @@ import storage from '@react-native-firebase/storage';
 import { randomId } from '_utils';
 
 import * as categoriesActions from './categories';
+import { Recepie, Category } from '_types';
 
 export enum CookbookActions {
   GET_LIST = 'GET_LIST',
@@ -19,26 +20,26 @@ export const getUserCollection =
         .collection('cookbooks')
         .where('user_id', '==', userId)
         .get();
-      const data = [
+      const data = <Recepie[]>[
         ...list.docs.map(x => ({
           ...x._data,
           id: x._ref._documentPath._parts.pop(),
+          categories: x._data.categories.map((categoryID: string) =>
+            categories.find((c: Category) => c.id === categoryID),
+          ),
         })),
       ];
 
-      const datac = data.map(item => ({
-        ...item,
-        categories: item.categories.map((category: string) =>
-          categories.find(c => c.id === category),
-        ),
-      }));
-
       //imitating searching on front, firebase dont support such actions
-      const filteredData = datac
+      const filteredData = data
         .filter(({ title }) =>
           title.toLowerCase().match(new RegExp(query.toLowerCase(), 'g')),
         )
-        .sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate));
+        .sort(
+          (a: Recepie, b: Recepie) =>
+            new Date(b.creationDate).getTime() -
+            new Date(a.creationDate).getTime(),
+        );
 
       dispatch({
         type: CookbookActions.GET_LIST,
