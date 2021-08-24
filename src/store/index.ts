@@ -1,5 +1,4 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 
 import authReducer from './reducers/auth';
@@ -19,9 +18,18 @@ const rootReducer = (state, action) => {
   return appReducer(state, action);
 };
 
+const middlewares = [
+  thunk
+];
+
+if (__DEV__) {
+  const createDebugger = require("redux-flipper").default;
+  middlewares.push(createDebugger());
+}
+
 const store = createStore(
   rootReducer,
-  composeWithDevTools(applyMiddleware(thunk)),
+  applyMiddleware(...middlewares),
 );
 export default store;
 

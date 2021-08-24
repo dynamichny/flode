@@ -9,18 +9,24 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RouteProp } from '@react-navigation/native';
+
 
 import { CategoryIcon, ActionIconWrapper, Button } from '_atoms';
 import { ImagesWithPageing } from '_molecules';
 import { Colors, Mixins, Typography } from '_styles';
-import { StackNavigatorParamsList, StackRoutes } from '_types';
+import { StackNavigatorParamsList, StackRoutes, RootRoutes } from '_types';
 
 export interface PreviewScreenProps {
-  navigation: StackScreenProps<
+  navigation: StackNavigationProp<
     StackNavigatorParamsList,
     StackRoutes.PreviewScreen
   >;
+  route: RouteProp<
+  StackNavigatorParamsList,
+  StackRoutes.PreviewScreen
+  >
 }
 
 const PreviewScreen = ({
@@ -88,7 +94,7 @@ const PreviewScreen = ({
             <Text style={s.sectionTitle}>Składniki</Text>
             <TouchableOpacity
               onPress={() =>
-                props.navigation.navigate('IngredientsCompletnessScreen', {
+                navigation.navigate(RootRoutes.IngredientsCompletnessScreen, {
                   list: data?.ingredients,
                   steps: data?.steps,
                   title: data?.title,
@@ -115,7 +121,7 @@ const PreviewScreen = ({
         <Button
           label={'Przejdź do gotowania!'}
           onPress={() =>
-            props.navigation.navigate('CookingScreen', {
+            navigation.navigate(RootRoutes.CookingScreen, {
               steps: data?.steps,
               title: data?.title,
             })

@@ -5,6 +5,7 @@ import { randomId } from '_utils';
 
 import * as categoriesActions from './categories';
 import { Recepie, Category } from '_types';
+import { saveToStorage } from '_utils';
 
 export enum CookbookActions {
   GET_LIST = 'GET_LIST',
@@ -40,7 +41,7 @@ export const getUserCollection =
             new Date(b.creationDate).getTime() -
             new Date(a.creationDate).getTime(),
         );
-
+      saveToStorage('@filteredData', filteredData);
       dispatch({
         type: CookbookActions.GET_LIST,
         data: filteredData,
@@ -68,6 +69,7 @@ export const addItem = data => async (dispatch, getState) => {
         return imagePath;
       }),
     );
+    saveToStorage('@freshItem', data);
     await firestore()
       .collection('cookbooks')
       .add({
