@@ -1,4 +1,4 @@
-import 'react-native-gesture-handler';
+/* import 'react-native-gesture-handler';
 import React, { useEffect } from 'react';
 import { StatusBar, Platform } from 'react-native';
 import {
@@ -37,3 +37,5 @@ const App = () => {
 };
 
 export default App;
+ */
+export { default } from '../storybook';

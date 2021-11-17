@@ -10,7 +10,10 @@ module.exports = {
     './jest/setup.js',
     './node_modules/react-native-gesture-handler/jestSetup.js',
   ],
-  setupFilesAfterEnv: ['@testing-library/jest-native/extend-expect'],
+  setupFilesAfterEnv: [
+    '@testing-library/jest-native/extend-expect',
+    './__mocks__/globalMock.js',
+  ],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
     '^~/(.*)$': '<rootDir>/$1',
