@@ -28,35 +28,35 @@ export interface Recepie {
 export type Step = string;
 
 export enum BottomRoutes {
-  CookbookScreen = 'CookbookScreen',
+  RecepiesListScreen = 'RecepiesListScreen',
   ExploreScreen = 'ExploreScreen',
   NotScreen = 'NotScreen',
 }
 export enum StackRoutes {
   BottomNavigation = 'BottomNavigation',
-  PreviewScreen = 'PreviewScreen',
+  RecepieDetailScreen = 'RecepieDetailScreen',
 }
 export enum RootRoutes {
   CookingScreen = 'CookingScreen',
   CreateModal = 'CreateModal',
-  IngredientsCompletnessScreen = 'IngredientsCompletnessScreen',
+  IngredientsScreen = 'IngredientsScreen',
   Stack = 'Stack',
 }
 
 export type BottomNavigatorParamsList = {
   [BottomRoutes.ExploreScreen]: undefined;
   [BottomRoutes.NotScreen]: undefined;
-  [BottomRoutes.CookbookScreen]: undefined;
+  [BottomRoutes.RecepiesListScreen]: undefined;
 };
 export type StackNavigatorParamsList = {
-  [StackRoutes.PreviewScreen]: { item: Recepie };
+  [StackRoutes.RecepieDetailScreen]: { item: Recepie };
   [StackRoutes.BottomNavigation]: NavigatorScreenParams<BottomNavigatorParamsList>;
 };
 export type RootNavigatorParamsList = {
   [RootRoutes.Stack]: NavigatorScreenParams<StackNavigatorParamsList>;
   [RootRoutes.CreateModal]: undefined;
   [RootRoutes.CookingScreen]: { title: string; steps: Step[] };
-  [RootRoutes.IngredientsCompletnessScreen]: {
+  [RootRoutes.IngredientsScreen]: {
     list: Ingredient[];
     steps: Step[];
     title: string;

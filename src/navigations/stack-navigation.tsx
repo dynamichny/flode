@@ -5,7 +5,7 @@ import {
 } from '@react-navigation/stack';
 
 import { BottomNavigation } from '_navigations';
-import { PreviewScreen } from '_scenes';
+import { RecepieDetailScreen } from '_scenes';
 import { StackNavigatorParamsList } from '_types';
 import { StackRoutes } from '_types';
 
@@ -26,8 +26,8 @@ export default function StackNavigation() {
         component={BottomNavigation}
       />
       <Stack.Screen
-        name={StackRoutes.PreviewScreen}
-        component={PreviewScreen}
+        name={StackRoutes.RecepieDetailScreen}
+        component={RecepieDetailScreen}
       />
     </Stack.Navigator>
   );

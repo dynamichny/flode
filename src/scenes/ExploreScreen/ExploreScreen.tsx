@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,7 +9,7 @@ import {
   Keyboard,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { StackScreenProps } from '@react-navigation/stack';
 import { BottomNavigatorParamsList } from '_types';
 import * as exploreActions from '../../store/actions/explore';
 
@@ -20,12 +20,10 @@ import { ListItem } from '_atoms';
 import { Recepie } from '_types';
 import { StackRoutes, BottomRoutes } from '_types';
 
-export interface ExploreScreenProps {
-  navigation: StackNavigationProp<
-    BottomNavigatorParamsList,
-    BottomRoutes.ExploreScreen
-  >;
-}
+export type ExploreScreenProps = StackScreenProps<
+  BottomNavigatorParamsList,
+  BottomRoutes.ExploreScreen
+>;
 
 const selectExoloreItems = (state: RootState) => state.explore.items;
 
@@ -60,8 +58,7 @@ const ExploreScreen = ({ navigation: { navigate } }: ExploreScreenProps) => {
                   creationDate={item.creationDate}
                   categories={item.categories}
                   onPress={() =>
-                    //@ts-ignore
-                    navigate(StackRoutes.PreviewScreen, {
+                    navigate(StackRoutes.RecepieDetailScreen, {
                       item,
                     })
                   }

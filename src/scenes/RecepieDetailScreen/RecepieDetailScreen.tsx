@@ -16,19 +16,17 @@ import { ImagesWithPageing } from '_molecules';
 import { Colors, Mixins, Typography } from '_styles';
 import { StackNavigatorParamsList, StackRoutes } from '_types';
 
-export interface PreviewScreenProps {
-  navigation: StackScreenProps<
-    StackNavigatorParamsList,
-    StackRoutes.PreviewScreen
-  >;
-}
+export type RecepieDetailScreenProps = StackScreenProps<
+  StackNavigatorParamsList,
+  StackRoutes.RecepieDetailScreen
+>;
 
-const PreviewScreen = ({
+const RecepieDetailScreen = ({
   navigation,
   route: {
     params: { item },
   },
-}: PreviewScreenProps) => {
+}: RecepieDetailScreenProps) => {
   const data = useRef(item).current;
   const insets = useSafeAreaInsets();
 
@@ -88,7 +86,7 @@ const PreviewScreen = ({
             <Text style={s.sectionTitle}>Składniki</Text>
             <TouchableOpacity
               onPress={() =>
-                props.navigation.navigate('IngredientsCompletnessScreen', {
+                navigation.navigate('IngredientsScreen', {
                   list: data?.ingredients,
                   steps: data?.steps,
                   title: data?.title,
@@ -115,7 +113,7 @@ const PreviewScreen = ({
         <Button
           label={'Przejdź do gotowania!'}
           onPress={() =>
-            props.navigation.navigate('CookingScreen', {
+            navigation.navigate('CookingScreen', {
               steps: data?.steps,
               title: data?.title,
             })
@@ -128,7 +126,7 @@ const PreviewScreen = ({
   );
 };
 
-export default PreviewScreen;
+export default RecepieDetailScreen;
 
 const s = StyleSheet.create({
   wrapper: {

@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import * as cookbookActions from '../../store/actions/cookbook';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { StackScreenProps } from '@react-navigation/stack';
 
 import { BottomNavigatorParamsList, BottomRoutes, StackRoutes } from '_types';
 import { Colors, Typography } from '_styles';
@@ -18,16 +18,16 @@ import { useAppDispatch, useAppSelector } from '_hooks';
 import { RootState } from '_store';
 import { ListItem, Serchbar } from '_atoms';
 
-export interface CookbookScreenProps {
-  navigation: StackNavigationProp<
-    BottomNavigatorParamsList,
-    BottomRoutes.CookbookScreen
-  >;
-}
+export type RecepiesListScreenProps = StackScreenProps<
+  BottomNavigatorParamsList,
+  BottomRoutes.RecepiesListScreen
+>;
 
 const selectCookbookItems = (state: RootState) => state.cookbook.items;
 
-const CookbookScreen = ({ navigation: { navigate } }: CookbookScreenProps) => {
+const RecepiesListScreen = ({
+  navigation: { navigate },
+}: RecepiesListScreenProps) => {
   const dispatch = useAppDispatch();
   const data = useAppSelector(selectCookbookItems);
   const [query, setQuery] = useState('');
@@ -61,7 +61,7 @@ const CookbookScreen = ({ navigation: { navigate } }: CookbookScreenProps) => {
                   categories={item.categories}
                   onPress={() =>
                     //@ts-ignore
-                    navigate(StackRoutes.PreviewScreen, {
+                    navigate(StackRoutes.RecepieDetailScreen, {
                       item,
                     })
                   }
@@ -82,7 +82,7 @@ const CookbookScreen = ({ navigation: { navigate } }: CookbookScreenProps) => {
   );
 };
 
-export default CookbookScreen;
+export default RecepiesListScreen;
 
 const s = StyleSheet.create({
   screen: {

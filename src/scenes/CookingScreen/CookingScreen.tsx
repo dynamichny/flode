@@ -7,7 +7,7 @@ import {
   FlatList,
   Dimensions,
 } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { StackScreenProps } from '@react-navigation/stack';
 
 import { RootNavigatorParamsList, RootRoutes } from '_types';
 import { Button } from '_atoms';
@@ -19,12 +19,10 @@ const DOT_WIDTH = 10;
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
-export interface CookingScreenProps {
-  navigation: StackNavigationProp<
-    RootNavigatorParamsList,
-    RootRoutes.CookingScreen
-  >;
-}
+export type CookingScreenProps = StackScreenProps<
+  RootNavigatorParamsList,
+  RootRoutes.CookingScreen
+>;
 
 const CookingScreen = ({
   navigation,

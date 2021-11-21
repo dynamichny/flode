@@ -5,8 +5,8 @@ import {
 } from '@react-navigation/stack';
 
 import {
-  CreateScreen,
-  IngredientsCompletnessScreen,
+  RecepieFormScreen,
+  IngredientsScreen,
   CookingScreen,
 } from '_scenes';
 import { StackNavigation } from '_navigations';
@@ -30,15 +30,15 @@ export default function RootNavigation() {
       <RootStack.Screen name={RootRoutes.Stack} component={StackNavigation} />
       <RootStack.Screen
         name={RootRoutes.CreateModal}
-        component={CreateScreen}
+        component={RecepieFormScreen}
       />
       <RootStack.Screen
         name={RootRoutes.CookingScreen}
         component={CookingScreen}
       />
       <RootStack.Screen
-        name={RootRoutes.IngredientsCompletnessScreen}
-        component={IngredientsCompletnessScreen}
+        name={RootRoutes.IngredientsScreen}
+        component={IngredientsScreen}
       />
     </RootStack.Navigator>
   );

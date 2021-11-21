@@ -5,23 +5,22 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { StackScreenProps } from '@react-navigation/stack';
 
 import { Colors, Typography } from '_styles';
 import { RootRoutes, RootNavigatorParamsList } from '_types';
 import { Button } from '_atoms';
 import { CompletnessListItem, ModalHeader } from '_molecules';
-export interface IngredientsCompletnessScreenProps {
-  navigation: StackNavigationProp<
-    RootNavigatorParamsList,
-    RootRoutes.IngredientsCompletnessScreen
-  >;
-}
 
-const IngredientsCompletnessScreen = ({
+export type IngredientsScreenProps = StackScreenProps<
+  RootNavigatorParamsList,
+  RootRoutes.IngredientsScreen
+>;
+
+const IngredientsScreen = ({
   navigation,
   route: { params },
-}: IngredientsCompletnessScreenProps) => {
+}: IngredientsScreenProps) => {
   const [list, setList] = useState(() =>
     params.list.map(x => ({ ...x, checked: false })),
   );
@@ -35,7 +34,7 @@ const IngredientsCompletnessScreen = ({
     }
   }, [list]);
 
-  const toggleChecked = index => {
+  const toggleChecked = (index: number) => {
     const tempList = [...list];
     tempList[index].checked = !tempList[index].checked;
     setList(tempList);
@@ -96,7 +95,7 @@ const IngredientsCompletnessScreen = ({
   );
 };
 
-export default IngredientsCompletnessScreen;
+export default IngredientsScreen;
 
 const s = StyleSheet.create({
   screen: {

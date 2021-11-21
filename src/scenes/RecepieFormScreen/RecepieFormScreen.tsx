@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import * as cookbookActions from '../../store/actions/cookbook';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { StackScreenProps } from '@react-navigation/stack';
 
 import { RootNavigatorParamsList, RootRoutes } from '_types';
 import { Colors, Typography } from '_styles';
@@ -24,12 +24,10 @@ import { ImagePicker } from '_organisms';
 import { Formik, FieldArray } from 'formik';
 import * as Yup from 'yup';
 
-export interface CreateScreenProps {
-  navigation: StackNavigationProp<
-    RootNavigatorParamsList,
-    RootRoutes.CreateModal
-  >;
-}
+export type RecepieFormScreenProps = StackScreenProps<
+  RootNavigatorParamsList,
+  RootRoutes.CreateModal
+>;
 
 const selectCategories = (state: RootState) => state.categories.items;
 
@@ -80,13 +78,13 @@ const validationSchema = Yup.object({
     ),
 });
 
-const CreateScreen = ({ navigation }: CreateScreenProps) => {
+const RecepieFormScreen = ({ navigation }: RecepieFormScreenProps) => {
   const dispatch = useAppDispatch();
   const categories = useAppSelector(selectCategories);
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : null}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       style={{ flex: 1 }}>
       <View style={s.wrapper}>
         <ModalHeader
@@ -301,7 +299,7 @@ const CreateScreen = ({ navigation }: CreateScreenProps) => {
   );
 };
 
-export default CreateScreen;
+export default RecepieFormScreen;
 
 const s = StyleSheet.create({
   wrapper: {

@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { CookbookScreen, ExploreScreen } from '_scenes';
+import { RecepiesListScreen, ExploreScreen } from '_scenes';
 import { Colors, Mixins } from '_styles';
 import { CookbookIcon, ExploreIcon, CreateIcon } from '_icons';
 import { BottomNavigatorParamsList } from '_types';
@@ -17,7 +17,7 @@ const NotCreate = () => {
 export default function BottomNavigation() {
   return (
     <Tab.Navigator
-      initialRouteName={BottomRoutes.CookbookScreen}
+      initialRouteName={BottomRoutes.RecepiesListScreen}
       tabBarOptions={{
         showLabel: false,
         style: {
@@ -67,8 +67,8 @@ export default function BottomNavigation() {
         })}
       />
       <Tab.Screen
-        name={BottomRoutes.CookbookScreen}
-        component={CookbookScreen}
+        name={BottomRoutes.RecepiesListScreen}
+        component={RecepiesListScreen}
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={s.iconWrapper}>
