@@ -1,13 +1,17 @@
 import React from 'react';
+
 import {
-  createStackNavigator,
   CardStyleInterpolators,
+  createStackNavigator,
 } from '@react-navigation/stack';
 
-import { BottomNavigation } from '_navigations';
+import {
+  BottomNavigation,
+  NavigatorNames,
+  ScreenNames,
+  StackNavigatorParamsList,
+} from '_navigations';
 import { RecepieDetailScreen } from '_scenes';
-import { StackNavigatorParamsList } from '_types';
-import { StackRoutes } from '_types';
 
 const Stack = createStackNavigator<StackNavigatorParamsList>();
 
@@ -22,11 +26,11 @@ export default function StackNavigation() {
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}>
       <Stack.Screen
-        name={StackRoutes.BottomNavigation}
+        name={NavigatorNames.BottomNavigation}
         component={BottomNavigation}
       />
       <Stack.Screen
-        name={StackRoutes.RecepieDetailScreen}
+        name={ScreenNames.RecepieDetailScreen}
         component={RecepieDetailScreen}
       />
     </Stack.Navigator>

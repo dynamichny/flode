@@ -1,33 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import {
-  StyleSheet,
-  Text,
-  View,
-  SafeAreaView,
   FlatList,
-  TouchableWithoutFeedback,
   Keyboard,
+  SafeAreaView,
+  Text,
+  TouchableWithoutFeedback,
+  View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import * as cookbookActions from '../../store/actions/cookbook';
-import { StackScreenProps } from '@react-navigation/stack';
 
-import { BottomNavigatorParamsList, BottomRoutes, StackRoutes } from '_types';
-import { Colors, Typography } from '_styles';
-import { useAppDispatch, useAppSelector } from '_hooks';
-import { RootState } from '_store';
 import { ListItem, Serchbar } from '_atoms';
+import { useAppDispatch, useAppSelector } from '_hooks';
+import { ScreenNames } from '_navigations';
+import { NavigationService } from '_services';
+import { RootState } from '_store';
+import { Colors } from '_styles';
 
-export type RecepiesListScreenProps = StackScreenProps<
-  BottomNavigatorParamsList,
-  BottomRoutes.RecepiesListScreen
->;
+import * as cookbookActions from '../../store/actions/cookbook';
+import s from './RecepiesListScreen.styles';
 
 const selectCookbookItems = (state: RootState) => state.cookbook.items;
 
-const RecepiesListScreen = ({
-  navigation: { navigate },
-}: RecepiesListScreenProps) => {
+const RecepiesListScreen = () => {
   const dispatch = useAppDispatch();
   const data = useAppSelector(selectCookbookItems);
   const [query, setQuery] = useState('');
@@ -60,10 +54,12 @@ const RecepiesListScreen = ({
                   creationDate={item.creationDate}
                   categories={item.categories}
                   onPress={() =>
-                    //@ts-ignore
-                    navigate(StackRoutes.RecepieDetailScreen, {
-                      item,
-                    })
+                    NavigationService.navigate(
+                      ScreenNames.RecepieDetailScreen,
+                      {
+                        item,
+                      },
+                    )
                   }
                   index={index}
                 />
@@ -83,51 +79,3 @@ const RecepiesListScreen = ({
 };
 
 export default RecepiesListScreen;
-
-const s = StyleSheet.create({
-  screen: {
-    flex: 1,
-  },
-  wrapper: {
-    flex: 1,
-    position: 'relative',
-    backgroundColor: Colors.WHITE,
-    paddingTop: 10,
-  },
-  headerText: {
-    color: Colors.BLACK,
-    ...Typography.FONT_MEDIUM,
-    fontSize: Typography.FONT_SIZE_SEMIHEADER,
-    paddingHorizontal: 24,
-    marginTop: 10,
-  },
-  topGradient: {
-    height: 100,
-    width: '100%',
-    transform: [{ translateY: 20 }],
-    zIndex: 10,
-  },
-  bottomGradient: {
-    height: 150,
-    width: '100%',
-    zIndex: 10,
-    position: 'absolute',
-    bottom: 0,
-  },
-  list: {
-    paddingHorizontal: 24,
-    marginTop: 10,
-  },
-  listContainer: {
-    paddingTop: 0,
-    paddingBottom: 80,
-  },
-  primaryArea: {
-    flex: 1,
-    backgroundColor: Colors.PRIMARY,
-  },
-  whiteArea: {
-    flex: 0,
-    backgroundColor: Colors.WHITE,
-  },
-});

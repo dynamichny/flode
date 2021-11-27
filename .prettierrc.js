@@ -4,4 +4,7 @@ module.exports = {
   singleQuote: true,
   trailingComma: 'all',
   arrowParens: 'avoid',
+  importOrder: ['^(react)|(react-native)', '^[@]', '^[_]', '^[.]'],
+  importOrderSeparation: true,
+  importOrderSortSpecifiers: true,
 };

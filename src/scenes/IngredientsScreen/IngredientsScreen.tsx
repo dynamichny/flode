@@ -1,21 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, Text, View } from 'react-native';
 import Animated, {
-  useSharedValue,
   useAnimatedStyle,
+  useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { StackScreenProps } from '@react-navigation/stack';
 
-import { Colors, Typography } from '_styles';
-import { RootRoutes, RootNavigatorParamsList } from '_types';
 import { Button } from '_atoms';
 import { CompletnessListItem, ModalHeader } from '_molecules';
+import { IngredientsScreenProps, ScreenNames } from '_navigations';
+import { Colors } from '_styles';
 
-export type IngredientsScreenProps = StackScreenProps<
-  RootNavigatorParamsList,
-  RootRoutes.IngredientsScreen
->;
+import s from './IngredientsScreen.styles';
 
 const IngredientsScreen = ({
   navigation,
@@ -79,7 +75,7 @@ const IngredientsScreen = ({
               label="Zacznij gotowanie"
               onPress={() => {
                 setTimeout(() => {
-                  navigation.navigate('CookingScreen', {
+                  navigation.navigate(ScreenNames.CookingScreen, {
                     steps: params.steps,
                     title: params.title,
                   });
@@ -96,40 +92,3 @@ const IngredientsScreen = ({
 };
 
 export default IngredientsScreen;
-
-const s = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: Colors.WHITE,
-  },
-  listWrapper: {
-    paddingHorizontal: 24,
-  },
-  overlay: {
-    backgroundColor: '#000000B3',
-    ...StyleSheet.absoluteFill,
-    zIndex: 99,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-  },
-  overlayText: {
-    color: Colors.WHITE,
-    fontSize: Typography.FONT_SIZE_SEMIHEADER,
-    ...Typography.FONT_BOLD,
-    textAlign: 'center',
-  },
-  buttonsWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    height: 50,
-    marginTop: 20,
-  },
-  button: {
-    flex: 1,
-    marginHorizontal: 8,
-    paddingHorizontal: 24,
-  },
-});

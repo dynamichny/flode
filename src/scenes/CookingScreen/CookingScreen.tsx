@@ -1,28 +1,92 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef } from 'react';
 import {
-  StyleSheet,
+  Dimensions,
+  FlatList,
+  ListRenderItemInfo,
   Text,
   View,
-  Animated,
-  FlatList,
-  Dimensions,
 } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
+import Animated, {
+  Extrapolate,
+  interpolate,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useSharedValue,
+} from 'react-native-reanimated';
 
-import { RootNavigatorParamsList, RootRoutes } from '_types';
 import { Button } from '_atoms';
 import { ModalHeader } from '_molecules';
-import { Colors, Typography } from '_styles';
+import { CookingScreenProps } from '_navigations';
+
+import s from './CookingScreen.styles';
 
 const HEIGHT = Dimensions.get('screen').height;
-const DOT_WIDTH = 10;
+const STEP_HEIGHT = 240;
+const HEADER_HEIGHT = 80;
+export const DOT_WIDTH = 10;
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
-export type CookingScreenProps = StackScreenProps<
-  RootNavigatorParamsList,
-  RootRoutes.CookingScreen
->;
+const PagginationDot = ({
+  index,
+  scrollY,
+}: {
+  index: number;
+  scrollY: Animated.SharedValue<number>;
+}) => {
+  const interpolatedY = interpolate(
+    scrollY.value,
+    [STEP_HEIGHT * (index - 1), STEP_HEIGHT * index, STEP_HEIGHT * (index + 1)],
+    [0.5, 1, 0.5],
+    Extrapolate.CLAMP,
+  );
+
+  const dotStyle = useAnimatedStyle(() => ({
+    opacity: interpolatedY,
+    transform: [
+      {
+        scale: interpolatedY,
+      },
+    ],
+  }));
+
+  return <Animated.View style={[s.pagination, dotStyle]} />;
+};
+
+const RecepieItem = ({
+  item,
+  index,
+  scrollY,
+}: {
+  item: string;
+  index: number;
+  scrollY: Animated.SharedValue<number>;
+}) => {
+  const inputRange = [
+    (index - 1) * STEP_HEIGHT,
+    index * STEP_HEIGHT,
+    (index + 1) * STEP_HEIGHT,
+  ];
+
+  const itemStyle = useAnimatedStyle(
+    () => ({
+      height: STEP_HEIGHT,
+      opacity: interpolate(scrollY.value, inputRange, [0.3, 1, 0.3]),
+      transform: [
+        {
+          translateY: interpolate(scrollY.value, inputRange, [-35, 0, 70]),
+        },
+      ],
+    }),
+    [scrollY],
+  );
+
+  return (
+    <Animated.View style={[s.stepWrapper, itemStyle]}>
+      <Text style={[s.stepText]}>{item}</Text>
+    </Animated.View>
+  );
+};
 
 const CookingScreen = ({
   navigation,
@@ -30,19 +94,14 @@ const CookingScreen = ({
     params: { title, steps },
   },
 }: CookingScreenProps) => {
-  const scrollY = useRef(new Animated.Value(0)).current;
+  const scrollY = useSharedValue<number>(0);
   const headerRef = useRef<View>(null);
-  const [headerHeight, setHeaderHeight] = useState(0);
-  const stepHeight = 240;
-  const stepsList = ['first', ...steps, 'last'];
 
-  useEffect(() => {
-    setHeaderHeight(75);
-
-    headerRef.current?.measure((x, y, w, h) => {
-      setHeaderHeight(h);
-    });
-  }, []);
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll: e => {
+      scrollY.value = e.contentOffset.y;
+    },
+  });
 
   return (
     <View style={s.screen}>
@@ -52,110 +111,43 @@ const CookingScreen = ({
         ref={headerRef}
       />
       <View style={s.paginationWrapper}>
-        {steps.map((_, index) => {
-          const inputRange = [
-            stepHeight * (index - 1),
-            stepHeight * index,
-            stepHeight * (index + 1),
-          ];
-          return (
-            <Animated.View
-              key={`pag_${index}`}
-              style={[
-                s.pagination,
-                {
-                  opacity: scrollY.interpolate({
-                    inputRange,
-                    outputRange: [0.5, 1, 0.5],
-                    extrapolate: 'clamp',
-                  }),
-                  transform: [
-                    {
-                      scale: scrollY.interpolate({
-                        inputRange,
-                        outputRange: [0.5, 1, 0.5],
-                        extrapolate: 'clamp',
-                      }),
-                    },
-                  ],
-                },
-              ]}
-            />
-          );
-        })}
+        {steps.map((_, index) => (
+          <PagginationDot
+            {...{ index, key: `pag_${index}` }}
+            scrollY={scrollY}
+          />
+        ))}
       </View>
       <AnimatedFlatList
         scrollEventThrottle={16}
-        snapToInterval={stepHeight}
+        snapToInterval={STEP_HEIGHT}
         decelerationRate={0}
         bounces={false}
-        data={stepsList}
-        keyExtractor={(item: string) => item}
-        renderItem={({ item, index }: { item: string; index: number }) => {
-          if (['first', 'last'].includes(item)) {
-            if (item == 'last') {
-              return (
-                <View
-                  style={{
-                    height: (HEIGHT - headerHeight) / 2 - stepHeight / 2,
-                    alignItems: 'center',
-                  }}>
-                  <Button
-                    label={'Zakończ'}
-                    onPress={() => navigation.goBack()}
-                    style={{ width: 200 }}
-                  />
-                </View>
-              );
-            }
-            return (
-              <View
-                style={{ height: (HEIGHT - headerHeight) / 2 - stepHeight / 2 }}
-              />
-            );
-          }
-          const inputRange = [
-            (index - 2) * stepHeight,
-            (index - 1) * stepHeight,
-            index * stepHeight,
-          ];
-          return (
-            <Animated.View
-              style={[
-                s.stepWrapper,
-                {
-                  height: stepHeight,
-                  opacity: scrollY.interpolate({
-                    inputRange,
-                    outputRange: [0.3, 1, 0.3],
-                  }),
-                  transform: [
-                    {
-                      translateY: scrollY.interpolate({
-                        inputRange,
-                        outputRange: [-35, 0, 70],
-                      }),
-                    },
-                  ],
-                },
-              ]}>
-              <Text style={[s.stepText]}>{item}</Text>
-            </Animated.View>
-          );
-        }}
-        onScroll={Animated.event(
-          [
-            {
-              nativeEvent: {
-                contentOffset: {
-                  y: scrollY,
-                },
-              },
-            },
-          ],
-          {
-            useNativeDriver: true,
-          },
+        data={steps}
+        ListHeaderComponent={() => (
+          <View
+            style={{
+              height: (HEIGHT - HEADER_HEIGHT) / 2 - STEP_HEIGHT / 2,
+            }}
+          />
+        )}
+        ListFooterComponent={() => (
+          <View
+            style={{
+              height: (HEIGHT - HEADER_HEIGHT) / 2 - STEP_HEIGHT / 2,
+              alignItems: 'center',
+            }}>
+            <Button
+              label={'Zakończ'}
+              onPress={() => navigation.goBack()}
+              style={{ width: 200 }}
+            />
+          </View>
+        )}
+        keyExtractor={(item: string, index: number) => `${item}_${index}`}
+        onScroll={scrollHandler}
+        renderItem={({ item, index }: ListRenderItemInfo<string>) => (
+          <RecepieItem {...{ item, index, scrollY }} />
         )}
       />
     </View>
@@ -163,36 +155,3 @@ const CookingScreen = ({
 };
 
 export default CookingScreen;
-
-const s = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: Colors.WHITE,
-  },
-  stepWrapper: {
-    alignItems: 'center',
-    padding: 20,
-  },
-  stepText: {
-    color: Colors.BLACK,
-    ...Typography.FONT_REGULAR,
-    fontSize: Typography.FONT_SIZE_20,
-    textAlign: 'center',
-  },
-  paginationWrapper: {
-    position: 'absolute',
-    left: 8,
-    top: 0,
-    bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 100,
-  },
-  pagination: {
-    width: DOT_WIDTH,
-    height: DOT_WIDTH,
-    marginVertical: 3,
-    borderRadius: DOT_WIDTH / 2,
-    backgroundColor: Colors.PRIMARY,
-  },
-});

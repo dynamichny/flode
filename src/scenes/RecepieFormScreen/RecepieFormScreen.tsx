@@ -1,33 +1,28 @@
-import React from 'react';
-import {
-  StyleSheet,
-  View,
-  TouchableWithoutFeedback,
-  Keyboard,
-  ScrollView,
-  Text,
-  KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
-import * as cookbookActions from '../../store/actions/cookbook';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { StackScreenProps } from '@react-navigation/stack';
-
-import { RootNavigatorParamsList, RootRoutes } from '_types';
-import { Colors, Typography } from '_styles';
-import { useAppDispatch, useAppSelector } from '_hooks';
-import { RootState } from '_store';
-import { Input, Button, ActionIconWrapper, StepCreateTextarea } from '_atoms';
-import { ModalHeader, IngredientFormField, CategoryCheckbox } from '_molecules';
-import { ImagePicker } from '_organisms';
-
-import { Formik, FieldArray } from 'formik';
+import { FieldArray, Formik } from 'formik';
 import * as Yup from 'yup';
 
-export type RecepieFormScreenProps = StackScreenProps<
-  RootNavigatorParamsList,
-  RootRoutes.CreateModal
->;
+import React from 'react';
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import { ActionIconWrapper, Button, Input, StepCreateTextarea } from '_atoms';
+import { useAppDispatch, useAppSelector } from '_hooks';
+import { CategoryCheckbox, IngredientFormField, ModalHeader } from '_molecules';
+import { RecepieFormScreenProps } from '_navigations';
+import { ImagePicker } from '_organisms';
+import { RootState } from '_store';
+import { Colors } from '_styles';
+
+import * as cookbookActions from '../../store/actions/cookbook';
+import s from './RecepieFormScreen.styles';
 
 const selectCategories = (state: RootState) => state.categories.items;
 
@@ -39,7 +34,9 @@ const validationSchema = Yup.object({
     .of(
       //@ts-ignore
       Yup.lazy((item, options) => {
+        //@ts-ignore
         const itemIndex = options.from[0].value.ingredients.findIndex(
+          //@ts-ignore
           x => x.key == item.key,
         );
         return itemIndex === 0
@@ -62,7 +59,9 @@ const validationSchema = Yup.object({
     .of(
       //@ts-ignore
       Yup.lazy((item, options) => {
+        //@ts-ignore
         const itemIndex = options.from[0].value.steps.findIndex(
+          //@ts-ignore
           x => x.key == item.key,
         );
         return itemIndex === 0
@@ -300,65 +299,3 @@ const RecepieFormScreen = ({ navigation }: RecepieFormScreenProps) => {
 };
 
 export default RecepieFormScreen;
-
-const s = StyleSheet.create({
-  wrapper: {
-    backgroundColor: Colors.WHITE,
-    flex: 1,
-    position: 'relative',
-  },
-  closeButton: {
-    position: 'absolute',
-    top: 28,
-    right: 24,
-    zIndex: 10,
-  },
-  headerText: {
-    fontSize: Typography.FONT_SIZE_HEADER,
-    color: Colors.BLACK,
-    ...Typography.FONT_MEDIUM,
-    paddingVertical: 28,
-    paddingHorizontal: 24,
-  },
-  form: {
-    paddingVertical: 20,
-    paddingHorizontal: 24,
-  },
-  section: {
-    paddingVertical: 14,
-    paddingBottom: 70,
-  },
-  sectionTitle: {
-    ...Typography.FONT_REGULAR,
-    fontSize: Typography.FONT_SIZE_20,
-    textDecorationLine: 'underline',
-    textDecorationColor: Colors.PRIMARY,
-    textDecorationStyle: 'dotted',
-    marginHorizontal: 24,
-    marginBottom: 10,
-  },
-  scrollView: {
-    paddingBottom: 50,
-  },
-  appendButton: {
-    position: 'absolute',
-    right: 24,
-    bottom: 14,
-  },
-  categories: {
-    flexDirection: 'row',
-    paddingHorizontal: 14,
-    flexWrap: 'wrap',
-    alignItems: 'stretch',
-    justifyContent: 'center',
-  },
-  validationMessage: {
-    color: Colors.ALERT,
-    paddingTop: 5,
-    fontSize: Typography.FONT_SIZE_12,
-    ...Typography.FONT_REGULAR,
-  },
-  validationMessageWrapper: {
-    paddingHorizontal: 24,
-  },
-});

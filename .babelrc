@@ -22,6 +22,7 @@
           "_actions": "./src/store/actions",
           "_hooks": "./src/hooks",
           "_types": "./src/types",
+          "_hocs": "./src/hocs",
         }
       }
     ]

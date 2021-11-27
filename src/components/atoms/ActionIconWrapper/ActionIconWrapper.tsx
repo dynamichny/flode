@@ -13,6 +13,7 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
+import { BlurView } from '@react-native-community/blur';
 
 interface Props {
   children: React.ReactNode;
@@ -52,31 +53,39 @@ const ActionIconWrapper = ({
 
   return (
     <View
-      style={[
-        s.wrapper,
-        { backgroundColor, borderColor, width: size, height: size },
-        style,
-      ]}>
-      <TouchableWithoutFeedback
-        {...{ onPress }}
-        onPressIn={animateInnerCircle}
-        onPressOut={releaseButton}
-        {...rest}>
-        <View style={[s.circle, { width: size, height: size }]}>
-          {children}
-        </View>
-      </TouchableWithoutFeedback>
-      <Animated.View
-        style={[
-          s.animatedCircle,
-          {
-            backgroundColor: activeBackgroundColor,
-            width: size,
-            height: size,
-          },
-          circleStyle,
-        ]}
-      />
+      style={{
+        borderRadius: 999,
+        width: size,
+        height: size,
+        overflow: 'hidden',
+      }}>
+      <BlurView
+        blurType="light"
+        reducedTransparencyFallbackColor={backgroundColor}
+        blurAmount={100}
+        blurRadius={25}
+        style={[s.wrapper, { width: size, height: size }, style]}>
+        <TouchableWithoutFeedback
+          {...{ onPress }}
+          onPressIn={animateInnerCircle}
+          onPressOut={releaseButton}
+          {...rest}>
+          <View style={[s.circle, { width: size, height: size }]}>
+            {children}
+          </View>
+        </TouchableWithoutFeedback>
+        <Animated.View
+          style={[
+            s.animatedCircle,
+            {
+              backgroundColor: activeBackgroundColor,
+              width: size,
+              height: size,
+            },
+            circleStyle,
+          ]}
+        />
+      </BlurView>
     </View>
   );
 };
@@ -85,8 +94,6 @@ export default ActionIconWrapper;
 
 const s = StyleSheet.create({
   wrapper: {
-    borderRadius: 999,
-    borderWidth: 1,
     opacity: 0.7,
   },
   circle: {

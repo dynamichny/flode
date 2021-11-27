@@ -1,17 +1,18 @@
 import React from 'react';
-import {
-  createStackNavigator,
-  TransitionPresets,
-} from '@react-navigation/stack';
 
 import {
-  RecepieFormScreen,
-  IngredientsScreen,
-  CookingScreen,
-} from '_scenes';
+  TransitionPresets,
+  createStackNavigator,
+} from '@react-navigation/stack';
+
 import { StackNavigation } from '_navigations';
-import { RootNavigatorParamsList } from '_types';
-import { RootRoutes } from '_types';
+import { CookingScreen, IngredientsScreen, RecepieFormScreen } from '_scenes';
+
+import {
+  NavigatorNames,
+  RootNavigatorParamsList,
+  ScreenNames,
+} from './screensNames';
 
 const RootStack = createStackNavigator<RootNavigatorParamsList>();
 
@@ -27,17 +28,20 @@ export default function RootNavigation() {
           ...TransitionPresets.ModalPresentationIOS,
         };
       }}>
-      <RootStack.Screen name={RootRoutes.Stack} component={StackNavigation} />
       <RootStack.Screen
-        name={RootRoutes.CreateModal}
+        name={NavigatorNames.Stack}
+        component={StackNavigation}
+      />
+      <RootStack.Screen
+        name={ScreenNames.CreateModal}
         component={RecepieFormScreen}
       />
       <RootStack.Screen
-        name={RootRoutes.CookingScreen}
+        name={ScreenNames.CookingScreen}
         component={CookingScreen}
       />
       <RootStack.Screen
-        name={RootRoutes.IngredientsScreen}
+        name={ScreenNames.IngredientsScreen}
         component={IngredientsScreen}
       />
     </RootStack.Navigator>

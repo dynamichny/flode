@@ -1,33 +1,28 @@
 import React, { useEffect } from 'react';
 import {
-  StyleSheet,
-  Text,
-  View,
-  SafeAreaView,
   FlatList,
-  TouchableWithoutFeedback,
   Keyboard,
+  SafeAreaView,
+  Text,
+  TouchableWithoutFeedback,
+  View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { StackScreenProps } from '@react-navigation/stack';
-import { BottomNavigatorParamsList } from '_types';
-import * as exploreActions from '../../store/actions/explore';
 
-import { Colors, Typography } from '_styles';
-import { useAppDispatch, useAppSelector } from '_hooks';
-import { RootState } from '_store';
 import { ListItem } from '_atoms';
+import { useAppDispatch, useAppSelector } from '_hooks';
+import { ScreenNames } from '_navigations';
+import { NavigationService } from '_services';
+import { RootState } from '_store';
+import { Colors } from '_styles';
 import { Recepie } from '_types';
-import { StackRoutes, BottomRoutes } from '_types';
 
-export type ExploreScreenProps = StackScreenProps<
-  BottomNavigatorParamsList,
-  BottomRoutes.ExploreScreen
->;
+import * as exploreActions from '../../store/actions/explore';
+import s from './ExploreScreen.styles';
 
 const selectExoloreItems = (state: RootState) => state.explore.items;
 
-const ExploreScreen = ({ navigation: { navigate } }: ExploreScreenProps) => {
+const ExploreScreen = () => {
   const dispatch = useAppDispatch();
   const data = useAppSelector(selectExoloreItems);
 
@@ -58,9 +53,12 @@ const ExploreScreen = ({ navigation: { navigate } }: ExploreScreenProps) => {
                   creationDate={item.creationDate}
                   categories={item.categories}
                   onPress={() =>
-                    navigate(StackRoutes.RecepieDetailScreen, {
-                      item,
-                    })
+                    NavigationService.navigate(
+                      ScreenNames.RecepieDetailScreen,
+                      {
+                        item,
+                      },
+                    )
                   }
                   index={index}
                 />
@@ -80,51 +78,3 @@ const ExploreScreen = ({ navigation: { navigate } }: ExploreScreenProps) => {
 };
 
 export default ExploreScreen;
-
-const s = StyleSheet.create({
-  screen: {
-    flex: 1,
-  },
-  wrapper: {
-    flex: 1,
-    position: 'relative',
-    backgroundColor: Colors.WHITE,
-    paddingTop: 10,
-  },
-  headerText: {
-    color: Colors.BLACK,
-    ...Typography.FONT_MEDIUM,
-    fontSize: Typography.FONT_SIZE_SEMIHEADER,
-    paddingHorizontal: 24,
-    marginTop: 10,
-  },
-  topGradient: {
-    height: 100,
-    width: '100%',
-    transform: [{ translateY: 20 }],
-    zIndex: 10,
-  },
-  bottomGradient: {
-    height: 150,
-    width: '100%',
-    zIndex: 10,
-    position: 'absolute',
-    bottom: 0,
-  },
-  list: {
-    paddingHorizontal: 24,
-    marginTop: 10,
-  },
-  listContainer: {
-    paddingTop: 0,
-    paddingBottom: 80,
-  },
-  primaryArea: {
-    flex: 1,
-    backgroundColor: Colors.PRIMARY,
-  },
-  whiteArea: {
-    flex: 0,
-    backgroundColor: Colors.WHITE,
-  },
-});

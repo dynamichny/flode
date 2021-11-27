@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { RecepiesListScreen, ExploreScreen } from '_scenes';
+import { CookbookIcon, CreateIcon, ExploreIcon } from '_icons';
+import { BottomNavigatorParamsList, ScreenNames } from '_navigations';
+import { ExploreScreen, RecepiesListScreen } from '_scenes';
 import { Colors, Mixins } from '_styles';
-import { CookbookIcon, ExploreIcon, CreateIcon } from '_icons';
-import { BottomNavigatorParamsList } from '_types';
-import { BottomRoutes, RootRoutes } from '_types';
 
 const Tab = createBottomTabNavigator<BottomNavigatorParamsList>();
 
@@ -17,7 +17,7 @@ const NotCreate = () => {
 export default function BottomNavigation() {
   return (
     <Tab.Navigator
-      initialRouteName={BottomRoutes.RecepiesListScreen}
+      initialRouteName={ScreenNames.RecepiesListScreen}
       tabBarOptions={{
         showLabel: false,
         style: {
@@ -39,7 +39,7 @@ export default function BottomNavigation() {
         safeAreaInsets: { bottom: 0 },
       }}>
       <Tab.Screen
-        name={BottomRoutes.ExploreScreen}
+        name={ScreenNames.ExploreScreen}
         component={ExploreScreen}
         options={{
           tabBarIcon: ({ focused }) => (
@@ -54,20 +54,20 @@ export default function BottomNavigation() {
         }}
       />
       <Tab.Screen
-        name={BottomRoutes.NotScreen}
+        name={ScreenNames.NotScreen}
         component={NotCreate} //TODO: Change to screen which sugest to crate new repecpie
         options={({ navigation }) => ({
           tabBarButton: () => (
             <TouchableOpacity
               style={s.iconWrapper}
-              onPress={() => navigation.navigate(RootRoutes.CreateModal)}>
+              onPress={() => navigation.navigate(ScreenNames.CreateModal)}>
               <CreateIcon color={Colors.GRAY_DARK} height={75} width={75} />
             </TouchableOpacity>
           ),
         })}
       />
       <Tab.Screen
-        name={BottomRoutes.RecepiesListScreen}
+        name={ScreenNames.RecepiesListScreen}
         component={RecepiesListScreen}
         options={{
           tabBarIcon: ({ focused }) => (

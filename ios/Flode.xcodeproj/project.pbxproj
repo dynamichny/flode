@@ -35,6 +35,7 @@
 		EC91D16176A84D43BBD7D8D8 /* Poppins-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F2113BF1D11143E99AD8E0A4 /* Poppins-BoldItalic.ttf */; };
 		F52E5D3821034AE1BF865330 /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4575ADA365AC432C91EEA962 /* Poppins-Medium.ttf */; };
 		F5B188251DD84819A7A31DE5 /* Poppins-ExtraLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B19748AEDB464A7598E4ED17 /* Poppins-ExtraLightItalic.ttf */; };
+		F63902482745C145000EDC49 /* libswiftWebKit.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F63902472745C145000EDC49 /* libswiftWebKit.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -118,6 +119,7 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F2113BF1D11143E99AD8E0A4 /* Poppins-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-BoldItalic.ttf"; path = "../src/assets/fonts/Poppins/Poppins-BoldItalic.ttf"; sourceTree = "<group>"; };
 		F31E98B9020941CF919959F0 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
+		F63902472745C145000EDC49 /* libswiftWebKit.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswiftWebKit.tbd; path = usr/lib/swift/libswiftWebKit.tbd; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +135,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F63902482745C145000EDC49 /* libswiftWebKit.tbd in Frameworks */,
 				D395A222269389CE001CD2AC /* libRNSVG.a in Frameworks */,
 				D5BB8158E318A2B505AC76F1 /* libPods-Flode.a in Frameworks */,
 			);
@@ -175,6 +178,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F63902472745C145000EDC49 /* libswiftWebKit.tbd */,
 				D395A221269389CE001CD2AC /* libRNSVG.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				9AA77964486B7E6704251774 /* libPods-Flode.a */,
@@ -662,12 +666,16 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = N7MMJJLD2W;
+				DEVELOPMENT_TEAM = AGC4X2PW5A;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Flode/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/swift",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -689,11 +697,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = N7MMJJLD2W;
+				DEVELOPMENT_TEAM = AGC4X2PW5A;
 				INFOPLIST_FILE = Flode/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/swift",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
