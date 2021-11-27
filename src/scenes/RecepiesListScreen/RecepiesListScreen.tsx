@@ -16,7 +16,7 @@ import { NavigationService } from '_services';
 import { RootState } from '_store';
 import { Colors } from '_styles';
 
-import * as cookbookActions from '../../store/actions/cookbook';
+import * as cookbookActions from '../../store/ducks/Cookbook/cookbookActions';
 import s from './RecepiesListScreen.styles';
 
 const selectCookbookItems = (state: RootState) => state.cookbook.items;

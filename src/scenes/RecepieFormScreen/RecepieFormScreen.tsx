@@ -21,7 +21,7 @@ import { ImagePicker } from '_organisms';
 import { RootState } from '_store';
 import { Colors } from '_styles';
 
-import * as cookbookActions from '../../store/actions/cookbook';
+import * as cookbookActions from '../../store/ducks/Cookbook/cookbookActions';
 import s from './RecepieFormScreen.styles';
 
 const selectCategories = (state: RootState) => state.categories.items;

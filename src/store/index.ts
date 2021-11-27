@@ -1,28 +1,25 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { Middleware, applyMiddleware, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import createSagaMiddleware from 'redux-saga';
 import thunk from 'redux-thunk';
 
-import authReducer from './reducers/auth';
-import cookbookReducer from './reducers/cookbook';
-import categoriesReducer from './reducers/categories';
-import exploreReducer from './reducers/explore';
+import { getCategoriesAsync } from './ducks/Categories/categoriesActions';
+import rootReducer from './rootReducer';
+import rootSaga from './sagas';
 
-const appReducer = combineReducers({
-  auth: authReducer,
-  cookbook: cookbookReducer,
-  categories: categoriesReducer,
-  explore: exploreReducer,
-});
+const sagaMiddleware = createSagaMiddleware();
 
-const rootReducer = (state, action) => {
-  if (action.type === 'DESTROY_SESSION') state = undefined;
-  return appReducer(state, action);
-};
+const middlewares: Middleware[] = [thunk, sagaMiddleware];
 
 const store = createStore(
   rootReducer,
-  composeWithDevTools(applyMiddleware(thunk)),
+  composeWithDevTools(applyMiddleware(...middlewares)),
 );
+
+sagaMiddleware.run(rootSaga);
+
+store.dispatch(getCategoriesAsync.request());
+
 export default store;
 
 export type RootState = ReturnType<typeof store.getState>;
